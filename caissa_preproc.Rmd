@@ -1,0 +1,77 @@
+---
+title: "Caissa Data Pre-Processing"
+output: html_notebook
+---
+
+# === Load Libraries ===
+
+```{r}
+library(shiny)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+```
+
+# === Load Dataset ===
+
+```{r}
+chessgames <- read.csv(file = "./data/Sept_20_analysis.csv")
+```
+
+# === Data Exploration ===
+
+```{r}
+str(chessgames)
+```
+
+```{r}
+summary(chessgames)
+```
+```{r}
+chessgames %>% 
+  group_by(Game_type) %>%
+  count()
+```
+
+# === Data Pre-Processing ===
+
+## Restrict to only blitz games
+Malcolm Gladwell has compared different time controls in chess to running different race lengths i.e. they require different skills.  We therefore want to remove bullet and classical games to focus on blitz, which is the most popular game type for casual players.
+
+```{r}
+blitzgames <- chessgames %>%
+  filter(Game_type == "Blitz")
+```
+
+```{r}
+str(blitzgames)
+```
+
+```{r}
+summary(blitzgames)
+```
+
+## Remove incomplete records
+
+```{r}
+blitzgames <- blitzgames[complete.cases(blitzgames),]
+```
+
+
+## Convert date and time columns to correct formats
+
+```{r}
+blitzgames$Date <- as.Date(blitzgames$Date, format = "%Y.%m.%d")
+blitzgames$UTCTime <- hms::as_hms(blitzgames$UTCTime)
+```
+
+# == Output Pre-Processed File ==
+
+## Save pre-processed data to a new .RDS file which can be used in Shiny app
+
+```{r}
+saveRDS(blitzgames, file = "./data/blitzgames_processed.RDS" )
+```
+
+
+
