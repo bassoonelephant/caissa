@@ -39,7 +39,7 @@ bad_move_data <- blitz %>%
 
 ### 2. Set up error Dataframes
 
-blunders <- bad_move_data %>%
+all_bad_moves <- bad_move_data %>%  # add blunders
   select(game_id, WhiteElo, BlackElo, player_moves, White_blunders, Black_blunders) %>%
   pivot_longer(cols = c("WhiteElo", "BlackElo"),
                names_to = "player",
@@ -50,6 +50,46 @@ blunders <- bad_move_data %>%
   mutate(error_type = "blunders") %>%
   select(game_id, player, elo, error_type, errors, player_moves)
 
-all_bad_moves <- blunders
+all_bad_moves <- all_bad_moves %>%  # add mistakes
+  bind_rows(bad_move_data %>%
+              select(game_id, WhiteElo, BlackElo, player_moves, White_mistakes, Black_mistakes) %>%
+              pivot_longer(cols = c("WhiteElo", "BlackElo"),
+                           names_to = "player",
+                           values_to = "elo"
+              ) %>%
+              mutate(player = ifelse(player == "WhiteElo", "White", "Black")) %>%
+              mutate(errors = ifelse(player == "White", White_mistakes, Black_mistakes)) %>%
+              mutate(error_type = "mistakes") %>%
+              select(game_id, player, elo, error_type, errors, player_moves)
+  )
 
+all_bad_moves <- all_bad_moves %>%  # add inaccuracies
+  bind_rows(bad_move_data %>%
+              select(game_id, WhiteElo, BlackElo, player_moves, White_inaccuracies, Black_inaccuracies) %>%
+              pivot_longer(cols = c("WhiteElo", "BlackElo"),
+                           names_to = "player",
+                           values_to = "elo"
+              ) %>%
+              mutate(player = ifelse(player == "WhiteElo", "White", "Black")) %>%
+              mutate(errors = ifelse(player == "White", White_inaccuracies, Black_inaccuracies)) %>%
+              mutate(error_type = "inaccuracies") %>%
+              select(game_id, player, elo, error_type, errors, player_moves)
+  )
+
+all_bad_moves <- all_bad_moves %>%  # add inferior moves
+  bind_rows(bad_move_data %>%
+              select(game_id, WhiteElo, BlackElo, player_moves, White_inferior_moves, Black_inferior_moves) %>%
+              pivot_longer(cols = c("WhiteElo", "BlackElo"),
+                           names_to = "player",
+                           values_to = "elo"
+              ) %>%
+              mutate(player = ifelse(player == "WhiteElo", "White", "Black")) %>%
+              mutate(errors = ifelse(player == "White", White_inferior_moves, Black_inferior_moves)) %>%
+              mutate(error_type = "inferior") %>%
+              select(game_id, player, elo, error_type, errors, player_moves)
+  )
   
+
+
+
+

@@ -22,10 +22,17 @@ dashboardPage(
     conditionalPanel(
       condition = "input.tabs == 'overview'",
       sidebarMenu(id = "overview_sidebar",
-        menuItem("The Data", tabName = "data_tab"),
-        menuItem("Research Questions", tabName = "researchq_tab"),
-        menuItem("FAQ", tabName = "faq_tab")
-      )
+                  menuItem("The Data", tabName = "data_tab"),
+                  menuItem("Research Questions", tabName = "researchq_tab"),
+                  menuItem("FAQ", tabName = "faq_tab")
+                  )
+      ),
+    conditionalPanel(
+      condition = "input.tabs == 'time'",
+      sidebarMenu(id = "time_sidebar",
+                  menuItem("Time Management", tabName = "time_mgmt_tab"),
+                  menuItem("Time Trouble", tabName = "time_trouble_tab")
+                  )
     )
   ),
   
@@ -42,7 +49,7 @@ dashboardPage(
                                       choices = c("Blunders" = "blunders",
                                                   "Mistakes" = "mistakes",
                                                   "Inaccuracies" = "inaccuracies",
-                                                  "All" = "all bad"),
+                                                  "All" = "inferior"),
                                             selected = "blunders"),
                          sliderInput("elo_range",
                                      label = "ELO Range",
@@ -55,9 +62,9 @@ dashboardPage(
                            column(8, plotOutput("badmoves"))
                          )),
                 tabPanel("Time",
-                         fluidRow(
-                           column(12, tags$div("Time Management Plot placeholder"))
-                         )),
+                         value = "time",
+                         uiOutput("time_content")
+                         ),
                 tabPanel("Openings",
                          fluidRow(
                            column(12, tags$div("Opening Analysis Plot placeholder"))

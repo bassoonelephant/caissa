@@ -44,13 +44,12 @@ shinyServer(function(input, output) {
         sum_player_moves = sum(player_moves, na.rm = TRUE)
       ) %>%
       mutate(error_rate = 100 * sum_num_errors / sum_player_moves) %>%
-      mutate(error_type = "blunders") %>%
       ggplot(aes(x = elo_bin, y = error_rate, fill = player)) +
       geom_bar(stat = "identity", position = "dodge") +
       labs(
-        title = "Error Rate (Blunders) by Elo Bin",
+        title = "Error Rate by ELO Bin",
         x = "Elo Bin",
-        y = "Error Rate"
+        y = "Error Rate per 100 Moves"
       ) +
       theme_minimal() +
       theme(
@@ -62,6 +61,45 @@ shinyServer(function(input, output) {
         legend.title = element_text(size = 14, face = "bold"),
         legend.text = element_text(size = 12)
       )
-    
   )
+  
+  # Time tab
+  output$time_content <- renderUI({
+    req(input$time_sidebar)
+    if (input$time_sidebar == "time_mgmt_tab") {
+      tagList(
+        h2("Time Management"),
+        tags$div("Here, you can find an analysis of time management by ELO.")
+      )
+    } else if (input$time_sidebar == "time_trouble_tab") {
+      tagList(
+        h2("Time Trouble"),
+        tags$div("Here is an analysis of time trouble.")
+      )
+    }
+  })
+  
 })
+
+
+
+# if (input$time_sidebar == "time_mgmt_tab") {
+#   tagList(
+#     h2("Time Management"),
+#     tags$div("Here, you can find an analysis of time management by ELO."),
+#     sliderInput("elo_range",
+#                 label = "ELO Range",
+#                 min = 500, 
+#                 max = 3500, 
+#                 value = c(1500, 2500),
+#                 step = 100),
+#     radioButtons("bad_move_types",
+#                  label = "Bad Move Types",
+#                  choices = c("Inaccuracies" = "inaccuracies",
+#                              "Mistakes" = "mistakes",
+#                              "Blunders" = "blunders",
+#                              "All" = "all bad"),
+#                  selected = "all bad"),
+#     plotOutput("badmoves")
+#   )
+# }
