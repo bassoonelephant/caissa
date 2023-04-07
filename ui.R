@@ -17,7 +17,7 @@ dashboardPage(
     color: white;
     }
       ")),
-    sidebarUserPanel("Explorer v1.0",
+    sidebarUserPanel("Data Explorer v1.0",
                      image = "chess_cyber.jpg"),
     conditionalPanel(
       condition = "input.tabs == 'overview'",
@@ -26,19 +26,6 @@ dashboardPage(
         menuItem("Research Questions", tabName = "researchq_tab"),
         menuItem("FAQ", tabName = "faq_tab")
       )
-    ),
-    conditionalPanel(
-      condition = "input.tabs == 'bad_moves'",
-      radioButtons("player_color",
-                   label = "Player Color",
-                   choices = c("Black" = "black",
-                               "White" = "white",
-                               "Both" = "both"),
-                   selected = "both"),
-      sliderInput("elo_range",
-                  label = "ELO Range",
-                  min = 1000, max = 3000, value = c(1500, 2500),
-                  step = 100)
     )
   ),
   
@@ -52,13 +39,20 @@ dashboardPage(
                 tabPanel("Bad Moves", value = "bad_moves",      
                          radioButtons("bad_move_types",
                                       label = "Bad Move Types",
-                                      choices = c("Inaccuracies" = "inaccuracies",
+                                      choices = c("Blunders" = "blunders",
                                                   "Mistakes" = "mistakes",
-                                                  "Blunders" = "blunders",
+                                                  "Inaccuracies" = "inaccuracies",
                                                   "All" = "all bad"),
-                                            selected = "all bad"),
+                                            selected = "blunders"),
+                         sliderInput("elo_range",
+                                     label = "ELO Range",
+                                     min = 500, 
+                                     max = 3500, 
+                                     value = c(1500, 2500),
+                                     step = 100
+                                     ),
                          fluidRow(
-                           column(12, tags$div("Bad Moves Plot placeholder"))
+                           column(8, plotOutput("badmoves"))
                          )),
                 tabPanel("Time",
                          fluidRow(

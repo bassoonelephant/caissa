@@ -25,9 +25,6 @@ str(chessgames)
 ```
 
 ```{r}
-summary(chessgames)
-```
-```{r}
 chessgames %>% 
   group_by(Game_type) %>%
   count()
@@ -35,41 +32,32 @@ chessgames %>%
 
 # === Data Pre-Processing ===
 
-## Restrict to only blitz games
-Malcolm Gladwell has compared different time controls in chess to running different race lengths i.e. they require different skills.  We therefore want to remove bullet and classical games to focus on blitz, which is the most popular game type for casual players.
-
 ```{r}
+## Restrict to only blitz games i.e. most popular game type for casual players
 blitzgames <- chessgames %>%
   filter(Game_type == "Blitz")
-```
-
-```{r}
-str(blitzgames)
-```
-
-```{r}
-summary(blitzgames)
-```
 
 ## Remove incomplete records
-
-```{r}
 blitzgames <- blitzgames[complete.cases(blitzgames),]
-```
-
 
 ## Convert date and time columns to correct formats
-
-```{r}
 blitzgames$Date <- as.Date(blitzgames$Date, format = "%Y.%m.%d")
 blitzgames$UTCTime <- hms::as_hms(blitzgames$UTCTime)
+
+## Remove GAME field
+blitzgames = subset(blitzgames, select = -GAME ) 
+
+## Remove duplicate records
+blitzgames <- blitzgames %>% distinct()
+
+## Add custom game_id field
+blitzgames <- tibble::rowid_to_column(blitzgames, "game_id")
 ```
 
-# == Output Pre-Processed File ==
-
-## Save pre-processed data to a new .RDS file which can be used in Shiny app
+# === Output Pre-Processed File ===
 
 ```{r}
+## Save pre-processed data to a new .RDS file which can be used in Shiny app
 saveRDS(blitzgames, file = "./data/blitzgames_processed.RDS" )
 ```
 
