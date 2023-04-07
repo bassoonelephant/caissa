@@ -44,14 +44,11 @@ blitzgames <- blitzgames[complete.cases(blitzgames),]
 blitzgames$Date <- as.Date(blitzgames$Date, format = "%Y.%m.%d")
 blitzgames$UTCTime <- hms::as_hms(blitzgames$UTCTime)
 
-## Remove GAME field
-blitzgames = subset(blitzgames, select = -GAME ) 
-
-## Remove duplicate records
-blitzgames <- blitzgames %>% distinct()
-
-## Add custom game_id field
-blitzgames <- tibble::rowid_to_column(blitzgames, "game_id")
+## Remove GAME field, duplicate records; add customer game_id field and player_moves field
+blitzgames <- subset(blitzgames, select = -GAME ) %>%
+  distinct() %>%
+  tibble::rowid_to_column("game_id") %>%
+  mutate(player_moves = ceiling(Total_moves / 2))
 ```
 
 # === Output Pre-Processed File ===

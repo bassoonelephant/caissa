@@ -34,10 +34,10 @@ bad_move_data <- blitz %>%
          White_inaccuracies, 
          Black_inferior_moves, 
          White_inferior_moves,
-         Total_moves) %>%
-  mutate(player_moves = ceiling(Total_moves / 2))
+         Total_moves,
+         player_moves)
 
-### 2. Set up error Dataframes
+### 2. Set up error dataframes
 
 all_bad_moves <- bad_move_data %>%  # add blunders
   select(game_id, WhiteElo, BlackElo, player_moves, White_blunders, Black_blunders) %>%
@@ -90,6 +90,56 @@ all_bad_moves <- all_bad_moves %>%  # add inferior moves
   )
   
 
+# ------------------------------------------------------------------------------------------------------
+
+# 3. ANALYSIS: TIME
+
+## A. Data Manipulation for Time Analysis
+
+### 1. Select needed columns
+time_data <- blitz %>% 
+  select(game_id, 
+         Result, 
+         BlackElo, 
+         WhiteElo, 
+         Black_ts_moves, 
+         White_ts_moves,
+         Black_ts_blunders,
+         White_ts_blunders,
+         Black_ts_mistakes,
+         White_ts_mistakes,
+         Black_long_moves,
+         White_long_moves,
+         Black_bad_long_moves,
+         White_bad_long_moves,
+         Total_moves,
+         player_moves)
+
+### 2. Set up time scramble and long move dataframes
+
+all_timed_moves <- time_data %>%  # add time scramble moves
+  select(game_id, WhiteElo, BlackElo, player_moves, White_ts_moves, Black_ts_moves) %>%
+  pivot_longer(cols = c("WhiteElo", "BlackElo"),
+               names_to = "player",
+               values_to = "elo"
+  ) %>%
+  mutate(player = ifelse(player == "WhiteElo", "White", "Black")) %>%
+  mutate(timed_moves = ifelse(player == "White", White_ts_moves, Black_ts_moves)) %>%
+  mutate(time_type = "ts") %>%
+  select(game_id, player, elo, time_type, timed_moves, player_moves)
+
+all_timed_moves <- time_data %>%  # add long moves
+  bind_rows(time_data %>%
+              select(game_id, WhiteElo, BlackElo, player_moves, White_long_moves, Black_long_moves) %>%
+              pivot_longer(cols = c("WhiteElo", "BlackElo"),
+                           names_to = "player",
+                           values_to = "elo"
+              ) %>%
+              mutate(player = ifelse(player == "WhiteElo", "White", "Black")) %>%
+              mutate(timed_moves = ifelse(player == "White", White_long_moves, Black_long_moves)) %>%
+              mutate(time_type = "long moves") %>%
+              select(game_id, player, elo, time_type, timed_moves, player_moves)
+  )
 
 
 
