@@ -128,7 +128,7 @@ all_timed_moves <- time_data %>%  # add time scramble moves
   mutate(time_type = "ts") %>%
   select(game_id, player, elo, time_type, timed_moves, player_moves)
 
-all_timed_moves <- time_data %>%  # add long moves
+all_timed_moves <- all_timed_moves %>%  # add long moves
   bind_rows(time_data %>%
               select(game_id, WhiteElo, BlackElo, player_moves, White_long_moves, Black_long_moves) %>%
               pivot_longer(cols = c("WhiteElo", "BlackElo"),

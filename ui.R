@@ -31,7 +31,8 @@ dashboardPage(
       condition = "input.tabs == 'time'",
       sidebarMenu(id = "time_sidebar",
                   menuItem("Time Management", tabName = "time_mgmt_tab"),
-                  menuItem("Time Trouble", tabName = "time_trouble_tab")
+                  menuItem("Time Scramble Trouble", tabName = "time_trouble_tab"),
+                  menuItem("Long Thinks", tabName = "long_think_tab")
                   )
     )
   ),
@@ -43,7 +44,8 @@ dashboardPage(
                          value = "overview",
                          uiOutput("overview_content")
                          ),
-                tabPanel("Bad Moves", value = "bad_moves",      
+                tabPanel("Bad Moves", value = "bad_moves",
+                         h2("Bad Moves by Player Strength"),
                          radioButtons("bad_move_types",
                                       label = "Bad Move Types",
                                       choices = c("Blunders" = "blunders",
@@ -55,7 +57,7 @@ dashboardPage(
                                      label = "ELO Range",
                                      min = 500, 
                                      max = 3500, 
-                                     value = c(1500, 2500),
+                                     value = c(1000, 2500),
                                      step = 100
                                      ),
                          fluidRow(

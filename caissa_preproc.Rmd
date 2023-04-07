@@ -49,6 +49,10 @@ blitzgames <- subset(blitzgames, select = -GAME ) %>%
   distinct() %>%
   tibble::rowid_to_column("game_id") %>%
   mutate(player_moves = ceiling(Total_moves / 2))
+
+## Correct misnamed columns
+blitzgames <- blitzgames %>%
+  rename(White_ts_mistakes = White_ts_mistake)
 ```
 
 # === Output Pre-Processed File ===
