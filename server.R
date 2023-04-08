@@ -26,16 +26,6 @@ shinyServer(function(input, output) {
   })
   
   
-  tagList(
-    h2("The Data"),
-    tags$div(HTML("
-  <p><a href='https://www.kaggle.com/datasets/noobiedatascientist/lichess-september-2020-data'>About Dataset</a></p>
-  <p><strong>Context</strong></p>
-  ...
-  (the rest of your text)
-  "))
-  )
-  
   # Bad Moves tab
   select_bad_moves <- reactive({
     all_bad_moves %>%
@@ -61,7 +51,7 @@ shinyServer(function(input, output) {
       ggplot(aes(x = elo_bin, y = error_rate, fill = player)) +
       geom_bar(stat = "identity", position = "dodge") +
       labs(
-        title = "Bad Moves by ELO Bin",
+        title = "Bad Moves by ELO",
         x = "Elo Bin",
         y = "Bad Moves per 100 Moves"
       ) +
@@ -82,7 +72,7 @@ shinyServer(function(input, output) {
     req(input$time_sidebar)
     if (input$time_sidebar == "time_mgmt_tab") {
       tagList(
-        h2("Time Management by Player Strength"),
+        h2("Time Management by ELO"),
         radioButtons("time_type",
                      label = "Timed Move Types",
                      choices = c("Time Scramble" = "ts",
@@ -97,6 +87,13 @@ shinyServer(function(input, output) {
                     step = 100),
         fluidRow(
           column(8, plotOutput("timed_moves_plot"))
+        )
+      )
+    } else if (input$time_sidebar == "num_moves_tab") {
+      tagList(
+        h2("Number of Moves Per Game by ELO"),
+        fluidRow(
+          column(8, plotlyOutput("num_moves_plot"))
         )
       )
     } else if (input$time_sidebar == "time_trouble_tab") {
@@ -151,6 +148,18 @@ shinyServer(function(input, output) {
       legend.text = element_text(size = 12)
     )
     })
+  
+  output$num_moves_plot <- renderPlotly({
+    sampled_timed_moves <- all_timed_moves[sample(nrow(all_timed_moves), 10000),] # sample the data for faster rendering
+    
+    ggplot_obj <- sampled_timed_moves %>%
+      ggplot(aes(x = elo, y = player_moves)) +
+      geom_hex(bins = 50) +
+      geom_smooth(method = "lm", se = FALSE, color = "red", linetype = "solid")
+    
+    ggplotly(ggplot_obj)
+  })
+  
   
 })
 

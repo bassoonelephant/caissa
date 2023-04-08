@@ -31,6 +31,7 @@ dashboardPage(
       condition = "input.tabs == 'time'",
       sidebarMenu(id = "time_sidebar",
                   menuItem("Time Management", tabName = "time_mgmt_tab"),
+                  menuItem("Number of Moves", tabName = "num_moves_tab"),
                   menuItem("Time Scramble Trouble", tabName = "time_trouble_tab"),
                   menuItem("Long Thinks", tabName = "long_think_tab")
                   )

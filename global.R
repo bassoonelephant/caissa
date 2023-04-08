@@ -9,6 +9,7 @@ library(ggplot2)
 library(shinythemes)
 library(shinydashboard)
 library(hexbin)
+library(plotly)
 
 ## B. Load Processed Dataset ===
 
