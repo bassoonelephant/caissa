@@ -36,8 +36,6 @@ shinyServer(function(input, output) {
   "))
   )
   
-  
-  
   # Bad Moves tab
   select_bad_moves <- reactive({
     all_bad_moves %>%
@@ -63,9 +61,9 @@ shinyServer(function(input, output) {
       ggplot(aes(x = elo_bin, y = error_rate, fill = player)) +
       geom_bar(stat = "identity", position = "dodge") +
       labs(
-        title = "Error Rate by ELO Bin",
+        title = "Bad Moves by ELO Bin",
         x = "Elo Bin",
-        y = "Error Rate per 100 Moves"
+        y = "Bad Moves per 100 Moves"
       ) +
       theme_minimal() +
       theme(
@@ -95,9 +93,11 @@ shinyServer(function(input, output) {
                     label = "ELO Range",
                     min = 500, 
                     max = 3500, 
-                    value = c(1000, 2500),
+                    value = c(800, 2800),
                     step = 100),
-        plotOutput("timed_moves_plot")
+        fluidRow(
+          column(8, plotOutput("timed_moves_plot"))
+        )
       )
     } else if (input$time_sidebar == "time_trouble_tab") {
       tagList(
@@ -136,9 +136,9 @@ shinyServer(function(input, output) {
     ggplot(aes(x = elo_bin, y = error_rate, fill = player)) +
     geom_bar(stat = "identity", position = "dodge") +
     labs(
-      title = "Timed Mgmt by ELO Bin",
+      title = "Irregular Timed Moves by ELO Bin",
       x = "Elo Bin",
-      y = "Error Rate per 100 Moves"
+      y = "Irregular Moves per 100 Moves"
     ) +
     theme_minimal() +
     theme(

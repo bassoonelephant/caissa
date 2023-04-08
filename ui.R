@@ -57,7 +57,7 @@ dashboardPage(
                                      label = "ELO Range",
                                      min = 500, 
                                      max = 3500, 
-                                     value = c(1000, 2500),
+                                     value = c(800, 2800),
                                      step = 100
                                      ),
                          fluidRow(
