@@ -93,7 +93,7 @@ shinyServer(function(input, output) {
       tagList(
         h2("Number of Moves Per Game by ELO"),
         fluidRow(
-          column(8, plotlyOutput("num_moves_plot"))
+          column(6, plotlyOutput("num_moves_plot"))
         )
       )
     } else if (input$time_sidebar == "time_trouble_tab") {
@@ -154,12 +154,12 @@ shinyServer(function(input, output) {
     
     ggplot_obj <- sampled_timed_moves %>%
       ggplot(aes(x = elo, y = player_moves)) +
-      geom_hex(bins = 50) +
-      geom_smooth(method = "lm", se = FALSE, color = "red", linetype = "solid")
+      geom_hex(bins = 30) +
+      geom_smooth(method = "lm", se = FALSE, color = "red", linetype = "solid") +
+      labs(title = "Moves Per Game by ELO (10k Sample)", x = "Player ELO", y = "Moves per Game")
     
     ggplotly(ggplot_obj)
   })
-  
   
 })
 
