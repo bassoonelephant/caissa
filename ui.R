@@ -20,8 +20,8 @@ dashboardPage(
     sidebarUserPanel("Data Explorer v1.0",
                      image = "chess_cyber.jpg"),
     conditionalPanel(
-      condition = "input.tabs == 'overview'",
-      sidebarMenu(id = "overview_sidebar",
+        condition = "input.tabs == 'overview'",
+        sidebarMenu(id = "overview_sidebar",
                   menuItem("The Data", tabName = "data_tab"),
                   menuItem("Research Questions", tabName = "researchq_tab"),
                   menuItem("FAQ", tabName = "faq_tab")
