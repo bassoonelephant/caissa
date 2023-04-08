@@ -4,10 +4,13 @@ shinyServer(function(input, output) {
   # Overview tab
   output$overview_content <- renderUI({
     req(input$overview_sidebar)
-    if (input$overview_sidebar == "data_tab") {
+    if (input$overview_sidebar == "about_tab") {
       tagList(
-        h2("The Data"),
-        tags$div("Here, you can write a brief summary of the dataset.")
+        h2("About"),
+        tags$div(
+          p("Link to dataset: https://www.kaggle.com/datasets/noobiedatascientist/lichess-september-2020-data"),
+          p("This data is taken from over 5m games played on www.lichess.org in the month of Sep 2020.")
+        )
       )
     } else if (input$overview_sidebar == "researchq_tab") {
       tagList(
@@ -21,6 +24,19 @@ shinyServer(function(input, output) {
       )
     }
   })
+  
+  
+  tagList(
+    h2("The Data"),
+    tags$div(HTML("
+  <p><a href='https://www.kaggle.com/datasets/noobiedatascientist/lichess-september-2020-data'>About Dataset</a></p>
+  <p><strong>Context</strong></p>
+  ...
+  (the rest of your text)
+  "))
+  )
+  
+  
   
   # Bad Moves tab
   select_bad_moves <- reactive({

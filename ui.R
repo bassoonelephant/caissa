@@ -1,5 +1,5 @@
 dashboardPage(
-  skin = "blue",
+  skin = "purple",
   
   # Header
   dashboardHeader(title = "Lichess Blitz Games"),
@@ -8,11 +8,11 @@ dashboardPage(
   dashboardSidebar(
     tags$style(HTML
     ("
-    .skin-blue .main-sidebar .sidebar .sidebar-menu .active a {
-    background-color: #2E8BC0;
+    .skin-purple .main-sidebar .sidebar .sidebar-menu .active a {
+    background-color: #9370DB;
     color: white;
     }
-    .skin-blue .sidebar-menu .active > a:hover {
+    .skin-purple .sidebar-menu .active > a:hover {
     background-color: #0056b3;
     color: white;
     }
@@ -22,7 +22,7 @@ dashboardPage(
     conditionalPanel(
         condition = "input.tabs == 'overview'",
         sidebarMenu(id = "overview_sidebar",
-                  menuItem("The Data", tabName = "data_tab"),
+                  menuItem("About", tabName = "about_tab"),
                   menuItem("Research Questions", tabName = "researchq_tab"),
                   menuItem("FAQ", tabName = "faq_tab")
                   )
