@@ -90,7 +90,14 @@ shinyUI(dashboardPage(
                            h2("Number of Moves Per Game by Player Strength"),
                            fluidRow(column(6, plotlyOutput("num_moves_plot")))
                            ),
-                  tabPanel("Time Trouble"),
+                  tabPanel("Time Trouble",
+                           tabsetPanel(
+                             tabPanel("Page 1"),
+                             tabPanel("Page 2",
+                                      h2("The Data")
+                                      )
+                             )
+                           ),
                   tabPanel("Long Thinks")
                   )
                 )
