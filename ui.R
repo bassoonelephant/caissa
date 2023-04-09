@@ -86,7 +86,10 @@ shinyUI(dashboardPage(
                                        step = 100),
                            fluidRow(column(8, plotOutput("timed_moves_plot")))
                            ),
-                  tabPanel("Moves"),
+                  tabPanel("Moves",
+                           h2("Number of Moves Per Game by Player Strength"),
+                           fluidRow(column(6, plotlyOutput("num_moves_plot")))
+                           ),
                   tabPanel("Time Trouble"),
                   tabPanel("Long Thinks")
                   )
@@ -102,6 +105,7 @@ shinyUI(dashboardPage(
   
 ))
     
+
                       
       # output$time_content <- renderUI({
       #   req(input$time_sidebar)

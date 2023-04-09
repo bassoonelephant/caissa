@@ -114,6 +114,9 @@ shinyServer(function(input, output) {
     }
   })
   
+  
+  # Time >> Time Management Analysis
+  
   select_timed_moves <- reactive({
     all_timed_moves %>%
       filter(elo >= input$elo_range_2[1] &
@@ -154,6 +157,8 @@ shinyServer(function(input, output) {
     )
     })
   
+  # Time >> Number of Moves Analysis
+  
   output$num_moves_plot <- renderPlotly({
     sampled_timed_moves <- all_timed_moves[sample(nrow(all_timed_moves), 10000),] # sample the data for faster rendering
     
@@ -161,10 +166,20 @@ shinyServer(function(input, output) {
       ggplot(aes(x = elo, y = player_moves)) +
       geom_hex(bins = 30) +
       geom_smooth(method = "lm", se = FALSE, color = "red", linetype = "solid") +
-      labs(title = "Moves Per Game by ELO (10k Sample)", x = "Player ELO", y = "Moves per Game")
+      labs(title = "Moves Per Game by Player Strength - 10k Sample", x = "Player ELO", y = "Moves per Game")
     
-    ggplotly(ggplot_obj)
+    ggplotly(ggplot_obj) %>%
+      layout(
+        title = list(text = "Moves Per Game by Player Strength - 10k Sample", x=0.5, xanchor = "center")
+      )
   })
+  
+  
+ # Time >> Time Trouble Analysis
+  
+  
+  
+  
   
 })
 
