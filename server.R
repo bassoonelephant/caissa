@@ -176,9 +176,15 @@ shinyServer(function(input, output) {
   
  # Time >> Time Trouble Analysis
   
-  
-  
-  
+  output$ts_sum_plot <- renderPlotly({
+    ggplot_obj2 <- ggplot(summary_ts, aes(x = blunder_type, y = blunder_rate)) +
+      geom_bar(stat="identity",position="dodge") +
+      facet_grid(~ rating_category) +
+      labs(x = "Move Type", y = "Count", title = "Summary of Blunders") +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    
+    ggplotly(ggplot_obj2)
+  })
   
 })
 

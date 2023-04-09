@@ -91,10 +91,14 @@ shinyUI(dashboardPage(
                            fluidRow(column(6, plotlyOutput("num_moves_plot")))
                            ),
                   tabPanel("Time Trouble",
+                           h2("Effect of Time Scrambles on Blunders"),
                            tabsetPanel(
-                             tabPanel("Page 1"),
-                             tabPanel("Page 2",
-                                      h2("The Data")
+                             tabPanel("Summary",
+                                      h4("Summary"),
+                                      fluidRow(column(8, plotlyOutput("ts_sum_plot")))
+                                      ),
+                             tabPanel("Distribution",
+                                      h4("Content")
                                       )
                              )
                            ),

@@ -17,7 +17,7 @@ blitz <- readRDS(file = "./data/blitzgames_processed.rds")
 
 # ------------------------------------------------------------------------------------------------------
 
-# 2. ANALYSIS: BAD MOVES
+# 2. BAD MOVES
 
 ## A. Data Manipulation for Bad Moves Analysis
 
@@ -93,11 +93,12 @@ all_bad_moves <- all_bad_moves %>%  # add inferior moves
 
 # ------------------------------------------------------------------------------------------------------
 
-# 3. ANALYSIS: TIME
+# 3. TIME
 
-## A. Data Manipulation for Time Analysis
+## A. Timed Moves
 
 ### 1. Select needed columns
+
 time_data <- blitz %>% 
   select(game_id, 
          Result, 
@@ -142,5 +143,39 @@ all_timed_moves <- all_timed_moves %>%  # add long moves
               select(game_id, player, elo, time_type, timed_moves, player_moves)
   )
 
+## B. Time Trouble
 
+black_ts <- blitz %>%
+  select(rating_category = Black_elo_category, 
+         blunders = Black_blunders,
+         ts_blunders = Black_ts_blunders,
+         all_moves = player_moves, 
+         ts_moves = Black_ts_moves) %>%
+  mutate(color = "Black")
+
+white_ts <- blitz %>%
+  select(rating_category = White_elo_category, 
+         blunders = White_blunders,
+         ts_blunders = White_ts_blunders,
+         all_moves = player_moves, 
+         ts_moves = White_ts_moves) %>%
+  mutate(color = "White")
+
+combined_ts <- bind_rows(black_ts, white_ts)
+
+summary_ts <- combined_ts %>%
+  group_by(rating_category) %>%
+  summarize(tot_all_moves = sum(all_moves),
+            tot_ts_moves = sum(ts_moves),
+            tot_reg_moves = tot_all_moves - tot_ts_moves,
+            tot_blunders = sum(blunders),
+            tot_ts_blunders = sum(ts_blunders),
+            tot_reg_blunders = tot_blunders - tot_ts_blunders) %>%
+  mutate(tot_blunder_rate = tot_blunders / tot_all_moves,         
+         ts_blunder_rate = tot_ts_blunders / tot_ts_moves,
+         reg_blunder_rate = tot_reg_blunders / tot_reg_moves) %>%
+  select(rating_category, tot_blunder_rate, ts_blunder_rate, reg_blunder_rate) %>%
+  pivot_longer(cols = -rating_category,
+               names_to = "blunder_type",
+               values_to = "blunder_rate")
 
