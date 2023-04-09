@@ -10,6 +10,7 @@ library(shinythemes)
 library(shinydashboard)
 library(hexbin)
 library(plotly)
+library(RColorBrewer)
 
 ## B. Load Processed Dataset ===
 

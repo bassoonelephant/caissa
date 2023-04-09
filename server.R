@@ -1,32 +1,7 @@
 
 shinyServer(function(input, output) {
-  
-  # Overview tab
-  # output$overview_content <- renderUI({
-  #   req(input$overview_sidebar)
-  #   if (input$overview_sidebar == "about_tab") {
-  #     tagList(
-  #       h2("About"),
-  #       tags$div(
-  #         p("Link to dataset: https://www.kaggle.com/datasets/noobiedatascientist/lichess-september-2020-data"),
-  #         p("This data is taken from over 5m games played on www.lichess.org in the month of Sep 2020.")
-  #       )
-  #     )
-  #   } else if (input$overview_sidebar == "researchq_tab") {
-  #     tagList(
-  #       h2("Research Questions"),
-  #       tags$div("Here are the major research questions.")
-  #     )
-  #   } else if (input$overview_sidebar == "faq_tab") {
-  #     tagList(
-  #       h2("FAQ"),
-  #       tags$div("In this section, you can provide answers to frequently asked questions.")
-  #     )
-  #   }
-  # })
-  
-  
-  # Bad Moves Analysis
+
+  # Bad Moves
   select_bad_moves <- reactive({
     all_bad_moves %>%
         filter(elo >= input$elo_range[1] & 
@@ -67,52 +42,49 @@ shinyServer(function(input, output) {
       )
   )
   
+  # ----------------------------------------------------------------------------
   
-  
-  # -------------------------------
-  
-  
-  # Time tab
-  output$time_content <- renderUI({
-    req(input$time_sidebar)
-    if (input$time_sidebar == "time_mgmt_tab") {
-      tagList(
-        h2("Time Management by ELO"),
-        radioButtons("time_type",
-                     label = "Timed Move Types",
-                     choices = c("Time Scramble" = "ts",
-                                 "Long Moves" = "long moves"),
-                     selected = "ts"
-                     ),
-        sliderInput("elo_range_2",
-                    label = "ELO Range",
-                    min = 500, 
-                    max = 3500, 
-                    value = c(800, 2800),
-                    step = 100),
-        fluidRow(
-          column(8, plotOutput("timed_moves_plot"))
-        )
-      )
-    } else if (input$time_sidebar == "num_moves_tab") {
-      tagList(
-        h2("Number of Moves Per Game by ELO"),
-        fluidRow(
-          column(6, plotlyOutput("num_moves_plot"))
-        )
-      )
-    } else if (input$time_sidebar == "time_trouble_tab") {
-      tagList(
-        h2("Time Scramble Trouble"),
-        tags$div("Here is an analysis of time trouble.")
-      )
-    } else if(input$time_sidebar == "long_think_tab") {
-      tagList(
-        h2("Long Think = Wrong Think?"),
-        tags$div("Is the old adage true?")
-      )
-    }
-  })
+  # Time
+  # output$time_content <- renderUI({
+  #   req(input$time_sidebar)
+  #   if (input$time_sidebar == "time_mgmt_tab") {
+  #     tagList(
+  #       h2("Time Management by ELO"),
+  #       radioButtons("time_type",
+  #                    label = "Timed Move Types",
+  #                    choices = c("Time Scramble" = "ts",
+  #                                "Long Moves" = "long moves"),
+  #                    selected = "ts"
+  #                    ),
+  #       sliderInput("elo_range_2",
+  #                   label = "ELO Range",
+  #                   min = 500, 
+  #                   max = 3500, 
+  #                   value = c(800, 2800),
+  #                   step = 100),
+  #       fluidRow(
+  #         column(8, plotOutput("timed_moves_plot"))
+  #       )
+  #     )
+  #   } else if (input$time_sidebar == "num_moves_tab") {
+  #     tagList(
+  #       h2("Number of Moves Per Game by ELO"),
+  #       fluidRow(
+  #         column(6, plotlyOutput("num_moves_plot"))
+  #       )
+  #     )
+  #   } else if (input$time_sidebar == "time_trouble_tab") {
+  #     tagList(
+  #       h2("Time Scramble Trouble"),
+  #       tags$div("Here is an analysis of time trouble.")
+  #     )
+  #   } else if(input$time_sidebar == "long_think_tab") {
+  #     tagList(
+  #       h2("Long Think = Wrong Think?"),
+  #       tags$div("Is the old adage true?")
+  #     )
+  #   }
+  # })
   
   
   # Time >> Time Management Analysis
@@ -177,14 +149,22 @@ shinyServer(function(input, output) {
  # Time >> Time Trouble Analysis
   
   output$ts_sum_plot <- renderPlotly({
-    ggplot_obj2 <- ggplot(summary_ts, aes(x = blunder_type, y = blunder_rate)) +
+    ggplot_obj2 <- ggplot(summary_ts, aes(x = blunder_type, y = blunder_rate * 100, fill = blunder_type)) +
       geom_bar(stat="identity",position="dodge") +
       facet_grid(~ rating_category) +
-      labs(x = "Move Type", y = "Count", title = "Summary of Blunders") +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+      scale_fill_brewer(palette = "Set2") +
+      scale_x_discrete(labels = c("reg_blunder_rate" = "regular", "tot_blunder_rate" = "all moves", "ts_blunder_rate" = "time scramble")) +
+      labs(x = "Move Type", y = "Blunders Per 100 Moves", title = "Summary of Blunder Rates by Time Condition by Player Strength") +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1),
+            axis.title.x = element_text(margin = margin(t=30)),
+            plot.title = element_text(hjust = 0.5))
     
     ggplotly(ggplot_obj2)
   })
+  
+  
+  
+  
   
 })
 

@@ -21,10 +21,10 @@ shinyUI(dashboardPage(
     sidebarUserPanel("Data Explorer v1.0",
                      image = "chess_cyber.jpg"),
     sidebarMenu(
-      menuItem("Overview", tabName = "overview", icon = icon("info")),
-      menuItem("Bad Moves", tabName = "bad_moves"),
-      menuItem("Time", tabName = "time"),
-      menuItem("Openings", tabName = "openings")
+      menuItem("Overview", tabName = "overview", icon = icon("info-circle")),
+      menuItem("Bad Moves", tabName = "bad_moves", icon = icon("exclamation-triangle")),
+      menuItem("Time", tabName = "time", icon = icon("clock")),
+      menuItem("Openings", tabName = "openings", icon = icon("chess-board"))
     )
   ),
     
@@ -94,8 +94,8 @@ shinyUI(dashboardPage(
                            h2("Effect of Time Scrambles on Blunders"),
                            tabsetPanel(
                              tabPanel("Summary",
-                                      h4("Summary"),
-                                      fluidRow(column(8, plotlyOutput("ts_sum_plot")))
+                                      fluidRow(column(8, plotlyOutput("ts_sum_plot"))),
+                                      p("Note: GM = 2400+, High = 1900-2400, Low = less than 1900")
                                       ),
                              tabPanel("Distribution",
                                       h4("Content")
