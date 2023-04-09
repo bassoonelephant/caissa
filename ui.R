@@ -50,7 +50,7 @@ shinyUI(dashboardPage(
               ),
       tabItem(tabName = "bad_moves",
               fluidPage(
-                h2("Bad Moves by ELO"),
+                h2("Bad Moves by Player Strength"),
                 radioButtons("bad_move_types",
                              label = "Bad Move Types",
                              choices = c("Blunders" = "blunders",
@@ -69,7 +69,27 @@ shinyUI(dashboardPage(
               ),
       tabItem(tabName = "time",
               fluidPage(
-                h2("Time")
+                tabsetPanel(
+                  tabPanel("Time Management",
+                           h2("Time Management by Player Strength"),
+                           radioButtons("time_type",
+                                        label = "Timed Move Types",
+                                        choices = c("Time Scramble" = "ts",
+                                                    "Long Moves" = "long moves"),
+                                        selected = "ts"
+                                        ),
+                           sliderInput("elo_range_2",
+                                       label = "ELO Range",
+                                       min = 500,
+                                       max = 3500,
+                                       value = c(800, 2800),
+                                       step = 100),
+                           fluidRow(column(8, plotOutput("timed_moves_plot")))
+                           ),
+                  tabPanel("Moves"),
+                  tabPanel("Time Trouble"),
+                  tabPanel("Long Thinks")
+                  )
                 )
               ),
       tabItem(tabName = "openings",
@@ -77,11 +97,63 @@ shinyUI(dashboardPage(
                 h2("Openings")
                 )
               )
-    )
+      )
   )
   
 ))
-
+    
+                      
+      # output$time_content <- renderUI({
+      #   req(input$time_sidebar)
+      #   if (input$time_sidebar == "time_mgmt_tab") {
+      #     tagList(
+      #       h2("Time Management by ELO"),
+      #       radioButtons("time_type",
+      #                    label = "Timed Move Types",
+      #                    choices = c("Time Scramble" = "ts",
+      #                                "Long Moves" = "long moves"),
+      #                    selected = "ts"
+      #       ),
+      #       sliderInput("elo_range_2",
+      #                   label = "ELO Range",
+      #                   min = 500, 
+      #                   max = 3500, 
+      #                   value = c(800, 2800),
+      #                   step = 100),
+      #       fluidRow(
+      #         column(8, plotOutput("timed_moves_plot"))
+      #       )
+      #     )
+      #   } else if (input$time_sidebar == "num_moves_tab") {
+      #     tagList(
+      #       h2("Number of Moves Per Game by ELO"),
+      #       fluidRow(
+      #         column(6, plotlyOutput("num_moves_plot"))
+      #       )
+      #     )
+      #   } else if (input$time_sidebar == "time_trouble_tab") {
+      #     tagList(
+      #       h2("Time Scramble Trouble"),
+      #       tags$div("Here is an analysis of time trouble.")
+      #     )
+      #   } else if(input$time_sidebar == "long_think_tab") {
+      #     tagList(
+      #       h2("Long Think = Wrong Think?"),
+      #       tags$div("Is the old adage true?")
+      #     )
+      #   }
+      # })      
+      # 
+      # 
+      # 
+      
+      
+      
+      
+      
+      
+      
+      
   
   
   
