@@ -2,28 +2,28 @@
 shinyServer(function(input, output) {
   
   # Overview tab
-  output$overview_content <- renderUI({
-    req(input$overview_sidebar)
-    if (input$overview_sidebar == "about_tab") {
-      tagList(
-        h2("About"),
-        tags$div(
-          p("Link to dataset: https://www.kaggle.com/datasets/noobiedatascientist/lichess-september-2020-data"),
-          p("This data is taken from over 5m games played on www.lichess.org in the month of Sep 2020.")
-        )
-      )
-    } else if (input$overview_sidebar == "researchq_tab") {
-      tagList(
-        h2("Research Questions"),
-        tags$div("Here are the major research questions.")
-      )
-    } else if (input$overview_sidebar == "faq_tab") {
-      tagList(
-        h2("FAQ"),
-        tags$div("In this section, you can provide answers to frequently asked questions.")
-      )
-    }
-  })
+  # output$overview_content <- renderUI({
+  #   req(input$overview_sidebar)
+  #   if (input$overview_sidebar == "about_tab") {
+  #     tagList(
+  #       h2("About"),
+  #       tags$div(
+  #         p("Link to dataset: https://www.kaggle.com/datasets/noobiedatascientist/lichess-september-2020-data"),
+  #         p("This data is taken from over 5m games played on www.lichess.org in the month of Sep 2020.")
+  #       )
+  #     )
+  #   } else if (input$overview_sidebar == "researchq_tab") {
+  #     tagList(
+  #       h2("Research Questions"),
+  #       tags$div("Here are the major research questions.")
+  #     )
+  #   } else if (input$overview_sidebar == "faq_tab") {
+  #     tagList(
+  #       h2("FAQ"),
+  #       tags$div("In this section, you can provide answers to frequently asked questions.")
+  #     )
+  #   }
+  # })
   
   
   # Bad Moves Analysis
