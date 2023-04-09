@@ -142,7 +142,7 @@ shinyServer(function(input, output) {
     
     ggplotly(ggplot_obj) %>%
       layout(
-        title = list(text = "Moves Per Game by Player Strength - 10k Sample", x=0.5, xanchor = "center")
+        title = list(text = "Moves Per Game by Player Strength", x=0.5, xanchor = "center")
       )
   })
   
@@ -153,8 +153,8 @@ shinyServer(function(input, output) {
       geom_bar(stat="identity",position="dodge") +
       facet_grid(~ rating_category) +
       scale_fill_brewer(palette = "Set2") +
-      scale_x_discrete(labels = c("reg_blunder_rate" = "regular", "tot_blunder_rate" = "all moves", "ts_blunder_rate" = "time scramble")) +
-      labs(x = "Move Type", y = "Blunders Per 100 Moves", title = "Summary of Blunder Rates by Time Condition by Player Strength") +
+      scale_x_discrete(labels = c("reg_blunder_rate" = "regular", "all_blunder_rate" = "all moves", "ts_blunder_rate" = "time scramble")) +
+      labs(x = "Move Type", y = "Blunders Per 100 Moves", title = "Summary of Blunder Rates by Time Condition and Player Strength") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1),
             axis.title.x = element_text(margin = margin(t=30)),
             plot.title = element_text(hjust = 0.5))
@@ -162,7 +162,21 @@ shinyServer(function(input, output) {
     ggplotly(ggplot_obj2)
   })
   
-  
+  output$ts_dist_plot <- renderPlotly({
+    sampled_ts <- dist_ts[sample(nrow(dist_ts), 10000), ]
+    
+    ggplot_obj3 = ggplot(sampled_ts, aes(x = blunder_type , y = blunder_rate * 100, fill = blunder_type)) +
+      geom_boxplot() +
+      facet_grid(~ rating_category) +
+      scale_fill_brewer(palette = "Set2") +
+      scale_x_discrete(labels = c("all_blunder_rate" = "all moves", "ts_blunder_rate" = "time scramble")) +
+      labs(x = "Move Type", y = "Blunders Per Game Per 100 Moves", title = "Distribution of Blunder Rates by Time Condition and Player Strength") +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1),
+            axis.title.x = element_text(margin = margin(t=30)),
+            plot.title = element_text(hjust = 0.5))
+    
+    ggplotly(ggplot_obj3)
+  })
   
   
   

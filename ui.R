@@ -88,17 +88,27 @@ shinyUI(dashboardPage(
                            ),
                   tabPanel("Moves",
                            h2("Number of Moves Per Game by Player Strength"),
-                           fluidRow(column(6, plotlyOutput("num_moves_plot")))
+                           fluidRow(column(6, plotlyOutput("num_moves_plot"))),
+                           p("Notes:",
+                             br(),
+                             "n = 10,000 sample")
                            ),
                   tabPanel("Time Trouble",
                            h2("Effect of Time Scrambles on Blunders"),
                            tabsetPanel(
                              tabPanel("Summary",
                                       fluidRow(column(8, plotlyOutput("ts_sum_plot"))),
-                                      p("Note: GM = 2400+, High = 1900-2400, Low = less than 1900")
+                                      p("Notes:",
+                                        br(),
+                                        "GM = 2400+, High = 1900-2400, Low = less than 1900")
                                       ),
                              tabPanel("Distribution",
-                                      h4("Content")
+                                      fluidRow(column(8, plotlyOutput("ts_dist_plot"))),
+                                      p("Notes:",
+                                        br(),
+                                        "GM = 2400+, High = 1900-2400, Low = less than 1900",
+                                        br(),
+                                        "n = 10,000 sample")
                                       )
                              )
                            ),

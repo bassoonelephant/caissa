@@ -172,11 +172,19 @@ summary_ts <- combined_ts %>%
             tot_blunders = sum(blunders),
             tot_ts_blunders = sum(ts_blunders),
             tot_reg_blunders = tot_blunders - tot_ts_blunders) %>%
-  mutate(tot_blunder_rate = tot_blunders / tot_all_moves,         
+  mutate(all_blunder_rate = tot_blunders / tot_all_moves,         
          ts_blunder_rate = tot_ts_blunders / tot_ts_moves,
          reg_blunder_rate = tot_reg_blunders / tot_reg_moves) %>%
-  select(rating_category, tot_blunder_rate, ts_blunder_rate, reg_blunder_rate) %>%
+  select(rating_category, all_blunder_rate, ts_blunder_rate, reg_blunder_rate) %>%
   pivot_longer(cols = -rating_category,
                names_to = "blunder_type",
                values_to = "blunder_rate")
 
+dist_ts <- combined_ts %>%
+  mutate(all_blunder_rate = blunders / all_moves,
+         ts_blunder_rate = ts_blunders / ts_moves) %>%
+  pivot_longer(cols = c("all_blunder_rate", "ts_blunder_rate"),
+               names_to = "blunder_type",
+               values_to = "blunder_rate") %>%
+  drop_na(blunder_rate)
+  
