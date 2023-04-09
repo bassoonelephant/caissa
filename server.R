@@ -26,7 +26,7 @@ shinyServer(function(input, output) {
   })
   
   
-  # Bad Moves tab
+  # Bad Moves Analysis
   select_bad_moves <- reactive({
     all_bad_moves %>%
         filter(elo >= input$elo_range[1] & 

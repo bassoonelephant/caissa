@@ -30,26 +30,54 @@ shinyUI(dashboardPage(
     
   # Body
   dashboardBody(
-    tabItem(tabName = "overview",
-      fluidPage(
-        tabsetPanel(
-          tabPanel("About",
-                   h1("About"),
-                   p("Content for About")
-          ),
-          tabPanel("The Data",
-                   h1("The Data"),
-                   tags$div(
-                     p("Link to dataset: https://www.kaggle.com/datasets/noobiedatascientist/lichess-september-2020-data"),
-                     p("This data is taken from over 5m games played on www.lichess.org in the month of Sep 2020.")
-                   )
-                   )
-        )
-      )
-    ),
-    tabItem(tabName = "bad_moves"),
-    tabItem(tabName = "time"),
-    tabItem(tabName = "openings")
+    tabItems(
+      tabItem(tabName = "overview",
+              fluidPage(
+                tabsetPanel(
+                  tabPanel("About",
+                           h2("About"),
+                           p("Content for About")
+                           ),
+                  tabPanel("The Data",
+                           h2("The Data"),
+                           tags$div(
+                             p("Link to dataset: https://www.kaggle.com/datasets/noobiedatascientist/lichess-september-2020-data"),
+                             p("This data is taken from over 5m games played on www.lichess.org in the month of Sep 2020.")
+                             )
+                           )
+                  )
+                )
+              ),
+      tabItem(tabName = "bad_moves",
+              fluidPage(
+                h2("Bad Moves by ELO"),
+                radioButtons("bad_move_types",
+                             label = "Bad Move Types",
+                             choices = c("Blunders" = "blunders",
+                                         "Mistakes" = "mistakes",
+                                         "Inaccuracies" = "inaccuracies",
+                                         "All" = "inferior"),
+                             selected = "blunders"),
+                sliderInput("elo_range",
+                            label = "ELO Range",
+                            min = 500,
+                            max = 3500,
+                            value = c(800, 2800),
+                            step = 100),
+                fluidRow(column(8, plotOutput("badmoves")))
+                )
+              ),
+      tabItem(tabName = "time",
+              fluidPage(
+                h2("Time")
+                )
+              ),
+      tabItem(tabName = "openings",
+              fluidPage(
+                h2("Openings")
+                )
+              )
+    )
   )
   
 ))
