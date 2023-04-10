@@ -146,7 +146,7 @@ all_timed_moves <- all_timed_moves %>%  # add long moves
               select(game_id, player, elo, time_type, timed_moves, player_moves)
   )
 
-## B. Time Trouble
+## B. Time Scrambles
 
 black_ts <- blitz %>%
   select(rating_category = Black_elo_category, 
@@ -189,6 +189,51 @@ dist_ts <- combined_ts %>%
                names_to = "blunder_type",
                values_to = "blunder_rate") %>%
   drop_na(blunder_rate)
+
+## C. Long Moves
+
+black_lm <- blitz %>%
+  select(rating_category = Black_elo_category, 
+         inf_moves = Black_inferior_moves,
+         inf_long_moves = Black_bad_long_moves,
+         all_moves = player_moves,
+         long_moves = Black_long_moves) %>%
+  mutate(color = "Black")
+
+white_lm <- blitz %>%
+  select(rating_category = White_elo_category, 
+         inf_moves = White_inferior_moves,
+         inf_long_moves = White_bad_long_moves,
+         all_moves = player_moves,
+         long_moves = White_long_moves) %>%
+  mutate(color = "White")
+
+combined_lm <- bind_rows(black_lm, white_lm)
+
+summary_lm <- combined_lm %>%
+  group_by(rating_category) %>%
+  summarize(tot_all_moves = sum(all_moves),
+            tot_long_moves = sum(long_moves),
+            tot_inf_moves = sum(inf_moves),
+            tot_inf_long_moves = sum(inf_long_moves),
+            tot_inf_reg_moves = tot_inf_moves - tot_inf_long_moves) %>%
+  mutate(all_inf_move_rate = tot_inf_moves / tot_all_moves,
+         inf_long_move_rate = tot_inf_long_moves / tot_long_moves,
+         inf_reg_move_rate = tot_inf_reg_moves / (tot_all_moves - tot_long_moves)) %>%
+  select(rating_category, all_inf_move_rate, inf_long_move_rate, inf_reg_move_rate) %>%
+  pivot_longer(cols = -rating_category,
+               names_to = "inferior_move_type",
+               values_to = "inferior_move_rate")
+
+dist_lm <- combined_lm %>%
+  mutate(all_inf_move_rate = inf_moves / all_moves,
+         inf_long_move_rate = inf_long_moves / long_moves) %>%
+  pivot_longer(cols = c("all_inf_move_rate", "inf_long_move_rate"),
+               names_to = "inferior_move_type",
+               values_to = "inferior_move_rate") %>%
+  drop_na(inferior_move_rate)
+
+
 
 
 # ------------------------------------------------------------------------------------------------------

@@ -55,47 +55,63 @@ shinyUI(dashboardPage(
                                       p("GAME: Game ID (not from lichess.org)"),
                                       p("BlackElo: Elo rating of the player with the black pieces"),
                                       p("BlackRatingDiff: Rating change (gain/loss) after game conclusion for the player with the black pieces"),
+                                      p("WhiteElo: Elo rating of the player with the white pieces"),
+                                      p("WhiteRatingDiff: Rating change (gain/loss) after game conclusion for the player with the white pieces"),
                                       p("Date: Date the game was played"),
-                                      p("ECO: Game opening (ECO notation)"),
+                                      p("UTCTime: Time the game was played"),
                                       p("Event: Event where the game was played"),
-                                      p("
-                                          Opening: Game opening
-                                          Result: Result of the game
-                                          	1-0 -- White victory
-                                          	0-1 -- Black victory
-                                          	1/2-1/2 -- Draw
-                                          	* -- Undecided
-                                          Site: URL of the game
-                                          Termination: Way the game terminated
-                                          	Time forfeit -- One of the players ran out of time
-                                          	Normal -- Game terminated with check mate
-                                          	Rules infraction -- Game terminated due to rule breaking
-                                          	Abandoned -- Game was abandoned
-                                          TimeControl: Timecontrol in seconds that was used for the game (Starting time: Increment) 
-                                          UTCTime: Time the game was played
-                                          WhiteElo: Elo rating of the player with the white pieces
-                                          WhiteRatingDiff: Rating change (gain/loss) after game conclusion for the player with the white pieces
-                                          Black_elo_category: ELO category of the player with the black pieces
+                                      p("Site: URL of the game "),
+                                      p("ECO: Game opening (ECO notation)"),
+                                      p("Opening: Game opening"),
+                                      p("Result: Result of the game (1-0 -- White victory || 0-1 -- Black victory || 1/2-1/2 -- Draw || * -- Undecided)"),
+                                      p("Termination: Way the game terminated (Time forfeit -- One of the players ran out of time || 
+                                        Normal -- Game terminated with check mate || 
+                                        Rules infraction -- Game terminated due to rule breaking || 
+                                        Abandoned -- Game was abandoned"),
+                                      p("TimeControl: Timecontrol in seconds that was used for the game (Starting time: Increment)"),
+                                      p("           Black_elo_category: ELO category of the player with the black pieces
                                           	Low rating -- Rating below 1900
                                           	High rating -- Rating above 1900 and below 2400
-                                          	GM rating -- Rating above 2400
-                                          starting_time: The time in seconds that the players have available at the start of the game (taken from TimeControl)
-                                          	EMPTY -- Correspondence games
-                                          increment: Time increment in seconds that was used in the game (taken from TimeControl)
-                                          	EMPTY -- Correspondence games
-                                          Game_type: Type of game based on TimeControl
+                                          	GM rating -- Rating above 2400"),
+                                      p("          starting_time: The time in seconds that the players have available at the start of the game (taken from TimeControl)
+                                          	EMPTY -- Correspondence games"),
+                                    
+                                      p(" increment: Time increment in seconds that was used in the game (taken from TimeControl)
+                                          	EMPTY -- Correspondence games ")   ,
+                                      
+                                      
+                                      p("      Game_type: Type of game based on TimeControl
                                           	Bullet -- Starting time below 2 minutes
                                           	Blitz -- Starting time between 2 and 10 minutes
                                           	Rapid -- Starting time between 10 and 15 minutes
                                           	Classical -- Starting time above 15 minutes or increment 2 minutes or higher
-                                          	Correspondence -- No time information
-                                          Total_moves: Total number of moves in the game
-                                          Black_blunders: Number of blunders by the player with the black pieces (move annotation ?? in the PGN)
+                                          	Correspondence -- No time information "),
+                                      
+                                      
+                                      
+                                      p("    Total_moves: Total number of moves in the game
+                                        "),
+                                      
+                                      
+                                      p("       Black_blunders: Number of blunders by the player with the black pieces (move annotation ?? in the PGN)
+                                        "),
+                                          
+                                         p("
+
+                                   
                                           White_blunders: Number of blunders by the player with the white pieces (move annotation ?? in the PGN)
+                                          
                                           Black_mistakes: Number of mistakes by the player with the black pieces (move annotation ? in the PGN)
+                                          
                                           White_mistakes: Number of mistakes by the player with the white pieces (move annotation ? in the PGN)
+                                          
                                           Black_inaccuracies: Number of inaccuracies by the player with the black pieces (move annotation ?! in the PGN)
+                                          
                                           White_inaccuracies: Number of inaccuracies by the player with the white pieces (move annotation ?! in the PGN)
+                                          
+                                          
+                                          
+                                          
                                           Black_inferior_moves: Black_blunders + Black_mistakes + Black_inaccuracies 
                                           White_inferior_moves: White_blunders + White_mistakes + White_inaccuracies
                                           Black_ts_moves: Number of moves by the player with the black pieces in time scramble (remaining time less than or equal to 10% of the starting time)
@@ -184,7 +200,25 @@ shinyUI(dashboardPage(
                                       )
                              )
                            ),
-                  tabPanel("Long Thinks")
+                  tabPanel("Long Thinks",
+                           h2("Effect of Long Moves on Inferior Moves"),
+                           tabsetPanel(
+                             tabPanel("Summary",
+                                      fluidRow(column(8, plotlyOutput("lm_sum_plot"))),
+                                      p("Notes:",
+                                        br(),
+                                        "GM = 2400+, High = 1900-2400, Low = less than 1900")
+                                      ),
+                             tabPanel("Distribution",
+                                      fluidRow(column(8, plotlyOutput("lm_dist_plot"))),
+                                      p("Notes:",
+                                        br(),
+                                        "GM = 2400+, High = 1900-2400, Low = less than 1900",
+                                        br(),
+                                        "n = 10,000 sample")
+                                      )
+                                    )
+                           )
                   )
                 )
               ),
