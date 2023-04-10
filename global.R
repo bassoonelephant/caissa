@@ -12,6 +12,7 @@ library(hexbin)
 library(plotly)
 library(RColorBrewer)
 library(DT)
+library(wordcloud2)
 
 ## B. Load Processed Dataset ===
 
@@ -209,7 +210,7 @@ openings_data <- blitz %>%
          White_ts_moves,
          player_moves)
 
-### 2. Set up dataframe for datatable
+### 2. Set up dataframes for datatable
 
 openings_data_agg <- openings_data %>%
   group_by(Opening, ECO) %>%
@@ -227,5 +228,10 @@ openings_data_agg <- openings_data %>%
 
 colnames(openings_data_agg) <- c("Opening", "ECO", "Total Games", "White Win Rate", "Black Win Rate", "Draw Rate", "Frequency %")
 
+eco_count <- openings_data %>%
+  group_by(ECO) %>%
+  summarise(Opening = paste(unique(Opening), collapse = ", "),
+            freq = n()) %>%
+  ungroup()
 
 

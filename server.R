@@ -139,7 +139,6 @@ shinyServer(function(input, output) {
   
   # Openings >> Ranking
   
-
   output$openings_table <- renderDT({
     table <- datatable(openings_data_agg,
               options = list(
@@ -157,6 +156,34 @@ shinyServer(function(input, output) {
     
     table
   })
+  
+  # ----------------------------------------------------------------------------
+  
+  # Openings >> ECO Word Cloud
+  
+  top_eco_codes <- reactive({
+    eco_count %>%
+      arrange(desc(freq)) %>%
+      head(input$n)
+  })
+  
+    
+  output$eco_wordcloud <- renderWordcloud2({
+    req(top_eco_codes())
+    wc_data <- data.frame(word = top_eco_codes()$ECO, freq = top_eco_codes()$freq)
+    wordcloud2(data = wc_data, size = 0.5)
+  })
+  
+  output$eco_table <- renderPlotly({
+    plot_ly(top_eco_codes, x = ~ECO, y = ~Opening, type = "table", hoverinfo = "text") %>%
+      layout(title = "ECO Codes and Corresponding Openings",
+             autosize = TRUE,
+             width = 1000,
+             height = 400,
+             margin = list(l = 100, r = 50, b = 100, t = 100, pad = 4))
+  })
+  
+  
   
 })
 

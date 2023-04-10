@@ -123,7 +123,12 @@ shinyUI(dashboardPage(
                            h2("Interactive Openings Data Table"),
                            fluidRow(column(8, DTOutput("openings_table")))
                   ),
-                  tabPanel("ECO Cloud"),
+                  tabPanel("ECO Cloud",
+                           h2("ECO Code Popularity"),
+                           sliderInput("n", "Top N Eco Codes", min = 1, max = 50, value = 20),
+                           fluidRow(column(7, wordcloud2Output("eco_wordcloud"))),
+                           plotlyOutput("eco_table")
+                  ),
                   tabPanel("Adversary")
                 )
               )
