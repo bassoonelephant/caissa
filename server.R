@@ -44,49 +44,6 @@ shinyServer(function(input, output) {
   
   # ----------------------------------------------------------------------------
   
-  # Time
-  # output$time_content <- renderUI({
-  #   req(input$time_sidebar)
-  #   if (input$time_sidebar == "time_mgmt_tab") {
-  #     tagList(
-  #       h2("Time Management by ELO"),
-  #       radioButtons("time_type",
-  #                    label = "Timed Move Types",
-  #                    choices = c("Time Scramble" = "ts",
-  #                                "Long Moves" = "long moves"),
-  #                    selected = "ts"
-  #                    ),
-  #       sliderInput("elo_range_2",
-  #                   label = "ELO Range",
-  #                   min = 500, 
-  #                   max = 3500, 
-  #                   value = c(800, 2800),
-  #                   step = 100),
-  #       fluidRow(
-  #         column(8, plotOutput("timed_moves_plot"))
-  #       )
-  #     )
-  #   } else if (input$time_sidebar == "num_moves_tab") {
-  #     tagList(
-  #       h2("Number of Moves Per Game by ELO"),
-  #       fluidRow(
-  #         column(6, plotlyOutput("num_moves_plot"))
-  #       )
-  #     )
-  #   } else if (input$time_sidebar == "time_trouble_tab") {
-  #     tagList(
-  #       h2("Time Scramble Trouble"),
-  #       tags$div("Here is an analysis of time trouble.")
-  #     )
-  #   } else if(input$time_sidebar == "long_think_tab") {
-  #     tagList(
-  #       h2("Long Think = Wrong Think?"),
-  #       tags$div("Is the old adage true?")
-  #     )
-  #   }
-  # })
-  
-  
   # Time >> Time Management Analysis
   
   select_timed_moves <- reactive({
@@ -178,7 +135,28 @@ shinyServer(function(input, output) {
     ggplotly(ggplot_obj3)
   })
   
+  # ----------------------------------------------------------------------------
   
+  # Openings >> Ranking
+  
+
+  output$openings_table <- renderDT({
+    table <- datatable(openings_data_agg,
+              options = list(
+                pageLength = 20,
+                autoWidth = TRUE,
+                order = list(list(3, 'desc'))
+                )
+    )
+    
+    ## Format columns as percentages
+    table <- table %>% formatPercentage(c("White Win Rate", "Black Win Rate", "Draw Rate", "Frequency %"), 2)
+
+    # Increase the width of the Opening column
+    table <- table %>% formatStyle(columns = "Opening", width = "250px")
+    
+    table
+  })
   
 })
 

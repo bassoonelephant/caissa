@@ -119,9 +119,12 @@ shinyUI(dashboardPage(
       tabItem(tabName = "openings",
               fluidPage(
                 tabsetPanel(
-                  tabPanel("Popularity"),
-                  tabPanel("Adversary"),
-                  tabPanel("Stats")
+                  tabPanel("Ranking",
+                           h2("Interactive Openings Data Table"),
+                           fluidRow(column(8, DTOutput("openings_table")))
+                  ),
+                  tabPanel("ECO Cloud"),
+                  tabPanel("Adversary")
                 )
               )
       )

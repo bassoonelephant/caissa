@@ -11,6 +11,7 @@ library(shinydashboard)
 library(hexbin)
 library(plotly)
 library(RColorBrewer)
+library(DT)
 
 ## B. Load Processed Dataset ===
 
@@ -187,4 +188,44 @@ dist_ts <- combined_ts %>%
                names_to = "blunder_type",
                values_to = "blunder_rate") %>%
   drop_na(blunder_rate)
-  
+
+
+# ------------------------------------------------------------------------------------------------------
+
+# 4. OPENINGS
+
+## A. Rankings
+
+### 1. Select needed columns
+
+openings_data <- blitz %>% 
+  select(game_id, 
+         Result,
+         ECO,
+         Opening,
+         Black_elo_category,
+         White_elo_category,
+         Black_ts_moves,
+         White_ts_moves,
+         player_moves)
+
+### 2. Set up dataframe for datatable
+
+openings_data_agg <- openings_data %>%
+  group_by(Opening, ECO) %>%
+  summarise(total_games = n(),
+            white_wins = sum(Result == "1-0"),
+            black_wins = sum(Result == "0-1"),
+            draws = sum(Result == "1/2-1/2")) %>%
+  ungroup() %>%
+  mutate(white_win_rate = white_wins / total_games,
+         black_win_rate = black_wins / total_games,
+         draw_rate = draws / total_games,
+         freq_percentage = (total_games / sum(total_games))) %>%
+  select(-white_wins, -black_wins, -draws) %>%
+  arrange(desc(total_games))
+
+colnames(openings_data_agg) <- c("Opening", "ECO", "Total Games", "White Win Rate", "Black Win Rate", "Draw Rate", "Frequency %")
+
+
+
