@@ -1,7 +1,10 @@
 
 shinyServer(function(input, output) {
 
+  # ----------------------------------------------------------------------------
   # Bad Moves
+  # ----------------------------------------------------------------------------
+  
   select_bad_moves <- reactive({
     all_bad_moves %>%
         filter(elo >= input$elo_range[1] & 
@@ -43,8 +46,8 @@ shinyServer(function(input, output) {
   )
   
   # ----------------------------------------------------------------------------
-  
   # Time >> Time Management Analysis
+  # ----------------------------------------------------------------------------
   
   select_timed_moves <- reactive({
     all_timed_moves %>%
@@ -86,7 +89,9 @@ shinyServer(function(input, output) {
     )
     })
   
+  # ----------------------------------------------------------------------------
   # Time >> Number of Moves Analysis
+  # ----------------------------------------------------------------------------
   
   output$num_moves_plot <- renderPlotly({
     sampled_timed_moves <- all_timed_moves[sample(nrow(all_timed_moves), 10000),] # sample the data for faster rendering
@@ -103,7 +108,9 @@ shinyServer(function(input, output) {
       )
   })
   
- # Time >> Time Trouble Analysis
+# ----------------------------------------------------------------------------
+# Time >> Time Trouble Analysis
+# ----------------------------------------------------------------------------  
   
   output$ts_sum_plot <- renderPlotly({
     ggplot_obj2 <- ggplot(summary_ts, aes(x = blunder_type, y = blunder_rate * 100, fill = blunder_type)) +
@@ -136,8 +143,43 @@ shinyServer(function(input, output) {
   })
   
   # ----------------------------------------------------------------------------
+  # Time >> Long Move Analysis
+  # ----------------------------------------------------------------------------
   
+  output$lm_sum_plot <- renderPlotly({
+    ggplot_obj4 <- ggplot(summary_lm, aes(x = inferior_move_type, y = inferior_move_rate * 100, fill = inferior_move_type)) +
+      geom_bar(stat="identity", position="dodge") +
+      facet_grid(~ rating_category) +
+      scale_fill_brewer(palette = "Set2") +
+      scale_x_discrete(labels = c("all_inf_move_rate" = "all moves", "inf_long_move_rate" = "long moves", "inf_reg_move_rate" = "regular moves")) +
+      labs(x = "Move Type", y = "Inferior Moves Per 100 Moves", title = "Summary of Inferior Move Rates by Long Moves and Player Strength") +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1),
+            axis.title.x = element_text(margin = margin(t=30)),
+            plot.title = element_text(hjust = 0.5))
+    
+    ggplotly(ggplot_obj4)
+  })
+  
+  output$lm_dist_plot <- renderPlotly({
+    sampled_lm <- dist_lm[sample(nrow(dist_lm), 10000), ]
+    
+    ggplot_obj5 <- ggplot(sampled_lm, aes(x = inferior_move_type, y = inferior_move_rate * 100, fill = inferior_move_type)) +
+      geom_boxplot() +
+      facet_grid(~ rating_category) +
+      scale_fill_brewer(palette = "Set2") +
+      scale_x_discrete(labels = c("all_inf_move_rate" = "all moves", "inf_long_move_rate" = "long moves")) +
+      labs(x = "Move Type", y = "Inferior Moves Per Game Per 100 Moves", title = "Distribution of Inferior Move Rates by Long Moves and Player Strength") +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1),
+            axis.title.x = element_text(margin = margin(t=30)),
+            plot.title = element_text(hjust = 0.5))
+    
+    ggplotly(ggplot_obj5)
+  })
+  
+  
+  # ----------------------------------------------------------------------------
   # Openings >> Ranking
+  # ----------------------------------------------------------------------------
   
   output$openings_table <- renderDT({
     table <- datatable(openings_data_agg,
@@ -158,8 +200,8 @@ shinyServer(function(input, output) {
   })
   
   # ----------------------------------------------------------------------------
-  
   # Openings >> ECO Word Cloud
+  # ----------------------------------------------------------------------------
   
   top_eco_codes <- reactive({
     eco_count %>% 
