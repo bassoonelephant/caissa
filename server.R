@@ -29,7 +29,7 @@ shinyServer(function(input, output) {
       ggplot(aes(x = elo_bin, y = error_rate, fill = player)) +
       geom_bar(stat = "identity", position = "dodge") +
       labs(
-        title = "Bad Moves by ELO",
+        title = "Bad Moves by Elo",
         x = "Elo Bin",
         y = "Bad Moves per 100 Moves"
       ) +
@@ -73,7 +73,7 @@ shinyServer(function(input, output) {
     ggplot(aes(x = elo_bin, y = error_rate, fill = player)) +
     geom_bar(stat = "identity", position = "dodge") +
     labs(
-      title = "Irregular Timed Moves by ELO Bin",
+      title = "Irregular Timed Moves by Elo Bin",
       x = "Elo Bin",
       y = "Irregular Moves per 100 Moves"
     ) +
@@ -100,7 +100,7 @@ shinyServer(function(input, output) {
       ggplot(aes(x = elo, y = player_moves)) +
       geom_hex(bins = 30) +
       geom_smooth(method = "lm", se = FALSE, color = "red", linetype = "solid") +
-      labs(title = "Moves Per Game by Player Strength - 10k Sample", x = "Player ELO", y = "Moves per Game")
+      labs(title = "Moves Per Game by Player Strength", x = "Player Elo", y = "Moves per Game")
     
     ggplotly(ggplot_obj) %>%
       layout(

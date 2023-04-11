@@ -150,18 +150,24 @@ shinyUI(dashboardPage(
                 h2("Bad Moves by Player Strength"),
                 radioButtons("bad_move_types",
                              label = "Bad Move Types",
-                             choices = c("Blunders" = "blunders",
-                                         "Mistakes" = "mistakes",
-                                         "Inaccuracies" = "inaccuracies",
+                             choices = c("Blunders = a very bad move (??)" = "blunders",
+                                         "Mistakes = a poor move (?)" = "mistakes",
+                                         "Inaccuracies = not the best move (?!)" = "inaccuracies",
                                          "All" = "inferior"),
                              selected = "blunders"),
                 sliderInput("elo_range",
-                            label = "ELO Range",
+                            label = "Elo Range",
                             min = 500,
                             max = 3500,
                             value = c(800, 2800),
                             step = 100),
-                fluidRow(column(8, plotOutput("badmoves")))
+                fluidRow(column(8, plotOutput("badmoves"))),
+                p("Notes:",
+                  br(),
+                  "Elo is a rating system used to calculate the skill of a chess player.",
+                  br(),
+                  "For reference, Magnus Carlsen - the world #1 ranked player - had an Elo rating of 2852 in blitz chess as of April 2023"
+                  )
                 )
               ),
       tabItem(tabName = "time",
@@ -171,8 +177,8 @@ shinyUI(dashboardPage(
                            h2("Time Management by Player Strength"),
                            radioButtons("time_type",
                                         label = "Timed Move Types",
-                                        choices = c("Time Scramble" = "ts",
-                                                    "Long Moves" = "long moves"),
+                                        choices = c("Time Scramble (<= 10% of starting time left)" = "ts",
+                                                    "Long Moves (>= 10% of starting time used)" = "long moves"),
                                         selected = "ts"
                                         ),
                            sliderInput("elo_range_2",
@@ -181,14 +187,25 @@ shinyUI(dashboardPage(
                                        max = 3500,
                                        value = c(800, 2800),
                                        step = 100),
-                           fluidRow(column(8, plotOutput("timed_moves_plot")))
+                           fluidRow(column(8, plotOutput("timed_moves_plot"))),
+                           p("Notes:",
+                             br(),
+                             "Elo is a rating system used to calculate the skill of a chess player.",
+                             br(),
+                             "For reference, Magnus Carlsen - the world #1 ranked player - had an Elo rating of 2852 in blitz chess as of April 2023"
+                             )
                            ),
                   tabPanel("Moves",
                            h2("Number of Moves Per Game by Player Strength"),
                            fluidRow(column(6, plotlyOutput("num_moves_plot"))),
                            p("Notes:",
                              br(),
-                             "n = 100,000 sample")
+                             "n = 100,000 sample",
+                             br(),
+                             "Elo is a rating system used to calculate the skill of a chess player.",
+                             br(),
+                             "For reference, Magnus Carlsen - the world #1 ranked player - had an Elo rating of 2852 in blitz chess as of April 2023"
+                             )
                            ),
                   tabPanel("Time Trouble",
                            h2("Effect of Time Scrambles on Blunders"),
@@ -197,13 +214,13 @@ shinyUI(dashboardPage(
                                       fluidRow(column(8, plotlyOutput("ts_sum_plot"))),
                                       p("Notes:",
                                         br(),
-                                        "GM = 2400+, High = 1900-2400, Low = less than 1900")
+                                        "GM = 2400+ Elo, High = 1900-2400, Low = less than 1900")
                                       ),
                              tabPanel("Sample Dist",
                                       fluidRow(column(8, plotlyOutput("ts_dist_plot"))),
                                       p("Notes:",
                                         br(),
-                                        "GM = 2400+, High = 1900-2400, Low = less than 1900",
+                                        "GM = 2400+ Elo, High = 1900-2400, Low = less than 1900",
                                         br(),
                                         "n = 100,000 sample")
                                       )
@@ -216,13 +233,13 @@ shinyUI(dashboardPage(
                                       fluidRow(column(8, plotlyOutput("lm_sum_plot"))),
                                       p("Notes:",
                                         br(),
-                                        "GM = 2400+, High = 1900-2400, Low = less than 1900")
+                                        "GM = 2400+ Elo, High = 1900-2400, Low = less than 1900")
                                       ),
                              tabPanel("Sample Dist",
                                       fluidRow(column(8, plotlyOutput("lm_dist_plot"))),
                                       p("Notes:",
                                         br(),
-                                        "GM = 2400+, High = 1900-2400, Low = less than 1900",
+                                        "GM = 2400+ Elo, High = 1900-2400, Low = less than 1900",
                                         br(),
                                         "n = 100,000 sample")
                                       )
