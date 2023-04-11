@@ -44,7 +44,7 @@ shinyUI(dashboardPage(
                                       p("Link to dataset: https://www.kaggle.com/datasets/noobiedatascientist/lichess-september-2020-data")
                                     ),
                                     tags$div(
-                                      h3("Dimensions"),
+                                      h3("Pre-Processing"),
                                       p("The original dataset comprises over 3.7m games (observations) and 40 variables.
                                         I took a subset of the data, selecting only blitz games.  Blitz games are defined as games
                                         where each player starts with between 2-10 minutes on their clock.  This new dataset
@@ -131,11 +131,19 @@ shinyUI(dashboardPage(
                              )
                            ),
                   tabPanel("FAQ",
-                           h2("FAQ")
-                             )
+                           h2("FAQ"),  
+                           tags$div(style = "max-width: 800px; word-wrap: break-word;",
+                                    tags$div(
+                                      h3("What research questions is this data exploration meant to answer?"),
+                                      p("1..."),
+                                      p("2..."),
+                                      p("3...")
+                                      ),
+                                    )
                            )
                   )
-                ),
+                )
+              ),
       tabItem(tabName = "bad_moves",
               fluidPage(
                 h2("Bad Moves by Player Strength"),
@@ -179,7 +187,7 @@ shinyUI(dashboardPage(
                            fluidRow(column(6, plotlyOutput("num_moves_plot"))),
                            p("Notes:",
                              br(),
-                             "n = 10,000 sample")
+                             "n = 100,000 sample")
                            ),
                   tabPanel("Time Trouble",
                            h2("Effect of Time Scrambles on Blunders"),
@@ -190,13 +198,13 @@ shinyUI(dashboardPage(
                                         br(),
                                         "GM = 2400+, High = 1900-2400, Low = less than 1900")
                                       ),
-                             tabPanel("Distribution",
+                             tabPanel("Sample Dist",
                                       fluidRow(column(8, plotlyOutput("ts_dist_plot"))),
                                       p("Notes:",
                                         br(),
                                         "GM = 2400+, High = 1900-2400, Low = less than 1900",
                                         br(),
-                                        "n = 10,000 sample")
+                                        "n = 100,000 sample")
                                       )
                              )
                            ),
@@ -209,13 +217,13 @@ shinyUI(dashboardPage(
                                         br(),
                                         "GM = 2400+, High = 1900-2400, Low = less than 1900")
                                       ),
-                             tabPanel("Distribution",
+                             tabPanel("Sample Dist",
                                       fluidRow(column(8, plotlyOutput("lm_dist_plot"))),
                                       p("Notes:",
                                         br(),
                                         "GM = 2400+, High = 1900-2400, Low = less than 1900",
                                         br(),
-                                        "n = 10,000 sample")
+                                        "n = 100,000 sample")
                                       )
                                     )
                            )
@@ -236,8 +244,8 @@ shinyUI(dashboardPage(
                            br(),
                            textInput("search_eco", "Search for ECO code:"),
                            tableOutput("eco_table")
-                  ),
-                  tabPanel("Adversary")
+                  )
+#                  ,tabPanel("Adversary")
                 )
               )
       )

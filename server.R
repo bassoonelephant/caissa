@@ -94,7 +94,7 @@ shinyServer(function(input, output) {
   # ----------------------------------------------------------------------------
   
   output$num_moves_plot <- renderPlotly({
-    sampled_timed_moves <- all_timed_moves[sample(nrow(all_timed_moves), 10000),] # sample the data for faster rendering
+    sampled_timed_moves <- all_timed_moves[sample(nrow(all_timed_moves), 1e5),] # sample the data for faster rendering
     
     ggplot_obj <- sampled_timed_moves %>%
       ggplot(aes(x = elo, y = player_moves)) +
@@ -108,9 +108,9 @@ shinyServer(function(input, output) {
       )
   })
   
-# ----------------------------------------------------------------------------
-# Time >> Time Trouble Analysis
-# ----------------------------------------------------------------------------  
+  # ----------------------------------------------------------------------------
+  # Time >> Time Trouble Analysis
+  # ----------------------------------------------------------------------------  
   
   output$ts_sum_plot <- renderPlotly({
     ggplot_obj2 <- ggplot(summary_ts, aes(x = blunder_type, y = blunder_rate * 100, fill = blunder_type)) +
@@ -127,7 +127,7 @@ shinyServer(function(input, output) {
   })
   
   output$ts_dist_plot <- renderPlotly({
-    sampled_ts <- dist_ts[sample(nrow(dist_ts), 10000), ]
+    sampled_ts <- dist_ts[sample(nrow(dist_ts), 100000), ]
     
     ggplot_obj3 = ggplot(sampled_ts, aes(x = blunder_type , y = blunder_rate * 100, fill = blunder_type)) +
       geom_boxplot() +
@@ -142,26 +142,29 @@ shinyServer(function(input, output) {
     ggplotly(ggplot_obj3)
   })
   
-  # ----------------------------------------------------------------------------
-  # Time >> Long Move Analysis
-  # ----------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------
+    # Time >> Long Move Analysis
+    # ----------------------------------------------------------------------------
   
-  output$lm_sum_plot <- renderPlotly({
+    output$lm_sum_plot <- renderPlotly({
+    summary_lm <- summary_lm %>%
+      mutate(inferior_move_type = factor(inferior_move_type, levels = c("all_inf_move_rate", "inf_reg_move_rate", "inf_long_move_rate")))
+    
     ggplot_obj4 <- ggplot(summary_lm, aes(x = inferior_move_type, y = inferior_move_rate * 100, fill = inferior_move_type)) +
       geom_bar(stat="identity", position="dodge") +
       facet_grid(~ rating_category) +
       scale_fill_brewer(palette = "Set2") +
-      scale_x_discrete(labels = c("all_inf_move_rate" = "all moves", "inf_long_move_rate" = "long moves", "inf_reg_move_rate" = "regular moves")) +
+      scale_x_discrete(labels = c("all_inf_move_rate" = "all moves", "inf_reg_move_rate" = "regular moves", "inf_long_move_rate" = "long moves")) +
       labs(x = "Move Type", y = "Inferior Moves Per 100 Moves", title = "Summary of Inferior Move Rates by Long Moves and Player Strength") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1),
             axis.title.x = element_text(margin = margin(t=30)),
             plot.title = element_text(hjust = 0.5))
     
     ggplotly(ggplot_obj4)
-  })
+    })
   
-  output$lm_dist_plot <- renderPlotly({
-    sampled_lm <- dist_lm[sample(nrow(dist_lm), 10000), ]
+    output$lm_dist_plot <- renderPlotly({
+      sampled_lm <- dist_lm[sample(nrow(dist_lm), 1e5), ] # sample the data for faster rendering
     
     ggplot_obj5 <- ggplot(sampled_lm, aes(x = inferior_move_type, y = inferior_move_rate * 100, fill = inferior_move_type)) +
       geom_boxplot() +
@@ -174,21 +177,20 @@ shinyServer(function(input, output) {
             plot.title = element_text(hjust = 0.5))
     
     ggplotly(ggplot_obj5)
-  })
+    })
   
+    # ----------------------------------------------------------------------------
+    # Openings >> Ranking
+    # ----------------------------------------------------------------------------
   
-  # ----------------------------------------------------------------------------
-  # Openings >> Ranking
-  # ----------------------------------------------------------------------------
-  
-  output$openings_table <- renderDT({
-    table <- datatable(openings_data_agg,
-              options = list(
-                pageLength = 20,
-                autoWidth = TRUE,
-                order = list(list(3, 'desc'))
-                )
-    )
+    output$openings_table <- renderDT({
+      table <- datatable(openings_data_agg,
+                options = list(
+                  pageLength = 20,
+                  autoWidth = TRUE,
+                  order = list(list(3, 'desc'))
+                  )
+      )
     
     ## Format columns as percentages
     table <- table %>% formatPercentage(c("White Win Rate", "Black Win Rate", "Draw Rate", "Frequency %"), 2)
@@ -197,34 +199,33 @@ shinyServer(function(input, output) {
     table <- table %>% formatStyle(columns = "Opening", width = "250px")
     
     table
-  })
+    })
   
-  # ----------------------------------------------------------------------------
-  # Openings >> ECO Word Cloud
-  # ----------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------
+    # Openings >> ECO Word Cloud
+    # ----------------------------------------------------------------------------
   
-  top_eco_codes <- reactive({
-    eco_count %>% 
-      arrange(desc(freq)) %>%
-      head(input$n)
-  })
+    top_eco_codes <- reactive({
+      eco_count %>% 
+        arrange(desc(freq)) %>%
+        head(input$n)
+    })
   
-  output$eco_wordcloud <- renderWordcloud2({
-    req(top_eco_codes())
-    wc_data <- data.frame(word = top_eco_codes()$ECO, freq = top_eco_codes()$freq)
-    wordcloud2(data = wc_data, size = 0.5)
-  })
+    output$eco_wordcloud <- renderWordcloud2({
+      req(top_eco_codes())
+      wc_data <- data.frame(word = top_eco_codes()$ECO, freq = top_eco_codes()$freq)
+      wordcloud2(data = wc_data, size = 0.5)
+    })
   
-  output$eco_table <- renderTable({
-    req(input$search_eco)
+    output$eco_table <- renderTable({
+      req(input$search_eco)
     
-    selected_eco <- input$search_eco
-    associated_openings <- openings_data %>% filter(ECO == selected_eco) %>%
-      distinct(Opening)
+      selected_eco <- input$search_eco
+      associated_openings <- openings_data %>% filter(ECO == selected_eco) %>%
+        distinct(Opening)
     
-    associated_openings
-  })
-  
+      associated_openings
+    })
   
 })
 
