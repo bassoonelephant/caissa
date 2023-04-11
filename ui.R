@@ -36,101 +36,111 @@ shinyUI(dashboardPage(
                 tabsetPanel(
                   tabPanel("The Data",
                            h2("The Data"),
-                           tags$div(style = "max-width: 1000px; word-wrap: break-word;",
+                           tags$div(style = "max-width: 800px; word-wrap: break-word;",
+                                    h3("Source"),
                                     tags$div(
-                                      h3("Source"),
-                                      p("Link to dataset: https://www.kaggle.com/datasets/noobiedatascientist/lichess-september-2020-data"),
-                                      p("This data is taken from a sample of Lichess games played during the month of September 2020.  
-                                        The games were annotated by Stockfish, which is an open-source chess engine.")
-                                    ),
+                                      tags$ul(
+                                        tags$li("Link to dataset: ",
+                                                tags$a(href="https://www.kaggle.com/datasets/noobiedatascientist/lichess-september-2020-data", "Kaggle dataset")),
+                                        tags$li("This data is taken from a sample of Lichess games played during the month of September 2020.  
+                                                The games were annotated by Stockfish, which is an open-source chess engine.")
+                                    )),
+                                    h3("Preprocessing"),
                                     tags$div(
-                                      h3("Pre-Processing"),
-                                      p("Link to data pre-processing script: https://github.com/bassoonelephant/caissa/blob/main/caissa_preproc.Rmd"),
-                                      p("The original dataset comprised over 3.7m games (observations) and 40 variables.
-                                        I took a subset of the data, selecting only blitz games.  Blitz games are defined as games
-                                        where each player starts with between 2-10 minutes on their clock.  This new dataset
-                                        comprises over 1.8m games and 40 variables."),
-                                      p("In addition, a custom game_id variable was created, and date/time variables were converted to appropriate formats.")
+                                      tags$ul(
+                                        tags$li("Link to data preprocessing script: ",
+                                                tags$a(href="https://github.com/bassoonelephant/caissa/blob/main/caissa_preproc.Rmd", "Preprocessing script")),
+                                        tags$li("The original dataset comprised over 3.7m games (observations) and 40 variables.
+                                                I took a subset of the data, selecting only blitz games.  Blitz games are defined as games
+                                                where each player starts with between 2-10 minutes on their clock.  This new dataset
+                                                comprises over 1.8m games and 40 variables."),
+                                        tags$li("In addition, a custom game_id variable was created, and date/time variables were converted to appropriate formats.")
+                                        )
+                                      )
                                     )
-                           )
-                  ),
+                           ),
                   tabPanel("Variables",
                            h2("Variables"),
-                           tags$div(style = "max-width: 1000px; word-wrap: break-word;",
+                           tags$div(style = "max-width: 800px; word-wrap: break-word;",
+                                    h3("Glossary"),
                                     tags$div(
-                                      h3("Guide to Variables"),
-                                      p("- game_id: Custom field for Game ID (not from lichess.org or original database)"),
-                                      p("- BlackElo: Elo rating of the player with the black pieces"),
-                                      p("- BlackRatingDiff: Rating change (gain/loss) after game conclusion for the player with the black pieces"),
-                                      p("- WhiteElo: Elo rating of the player with the white pieces"),
-                                      p("- WhiteRatingDiff: Rating change (gain/loss) after game conclusion for the player with the white pieces"),
-                                      p("- Date: Date the game was played"),
-                                      p("- UTCTime: Time the game was played"),
-                                      p("- Event: Event where the game was played"),
-                                      p("- Site: URL of the game "),
-                                      p("- ECO: Game opening (ECO notation)"),
-                                      p("- Opening: Game opening"),
-                                      p("- Result: Result of the game ==> 
-                                        1-0 -- White victory || 
-                                        0-1 -- Black victory || 
-                                        1/2-1/2 -- Draw || 
-                                        * -- Undecided"),
-                                      p("- Termination: Way the game terminated ==> 
-                                        Time forfeit -- One of the players ran out of time || 
-                                        Normal -- Game terminated with check mate || 
-                                        Rules infraction -- Game terminated due to rule breaking || 
-                                        Abandoned -- Game was abandoned"),
-                                      p("- TimeControl: Timecontrol in seconds that was used for the game (Starting time: Increment) ==>
-                                        Black_elo_category: ELO category of the player with the black pieces ||
-                                        Low rating -- Rating below 1900 ||
-                                        High rating -- Rating above 1900 and below 2400 ||
-                                        GM rating -- Rating above 2400"),
-                                      p("- starting_time: The time in seconds that the players have available at the start of the game 
-                                        (taken from TimeControl); EMPTY -- Correspondence games"),
-                                      p("- increment: Time increment in seconds that was used in the game (taken from TimeControl); 
-                                        EMPTY -- Correspondence games "),
-                                      p("- Game_type: Type of game based on TimeControl ==> 
-                                        Bullet -- Starting time below 2 minutes || 
-                                        Blitz -- Starting time between 2 and 10 minutes ||
-                                        Rapid -- Starting time between 10 and 15 minutes ||
-                                        Classical -- Starting time above 15 minutes or increment 2 minutes or higher ||
-                                        Correspondence -- No time information "),
-                                      p("- Total_moves: Total number of moves in the game"),
-                                      p("- player_moves: Custom field for moves per player; calculated as Total_moves/2, rounded up to nearest integer; will be slightly off for odd number of Total_moves"),
-                                      p("- Black_blunders: Number of blunders by the player with the black pieces (move annotation ?? in the PGN)"),
-                                      p("- White_blunders: Number of blunders by the player with the white pieces (move annotation ?? in the PGN)"),
-                                      p("- Black_mistakes: Number of mistakes by the player with the black pieces (move annotation ? in the PGN)"),
-                                      p("- White_mistakes: Number of mistakes by the player with the white pieces (move annotation ? in the PGN) "),
-                                      p("- Black_inaccuracies: Number of inaccuracies by the player with the black pieces (move annotation ?! in the PGN)"),
-                                      p("- White_inaccuracies: Number of inaccuracies by the player with the white pieces (move annotation ?! in the PGN) "),
-                                      p("- Black_inferior_moves: Black_blunders + Black_mistakes + Black_inaccuracies  "),
-                                      p("- White_inferior_moves: White_blunders + White_mistakes + White_inaccuracies "),
-                                      p("- Black_ts_moves: Number of moves by the player with the black pieces in time scramble (remaining time less than or equal to 10% of the starting time)"),
-                                      p("- White_ts_moves: Number of moves by the player with the white pieces in time scramble (remaining time less than or equal to 10% of the starting time)"),
-                                      p("- Black_ts_blunders: Number of blunders by the player with the black pieces in time scramble (remaining time less than or equal to 10% of the starting time)"),
-                                      p("- White_ts_blunders: Number of blunders by the player with the white pieces in time scramble (remaining time less than or equal to 10% of the starting time)"),
-                                      p("- Black_ts_mistakes: Number of mistakes by the player with the black pieces in time scramble (remaining time less than or equal to 10% of the starting time)"),
-                                      p("- White_ts_mistakes: Number of mistakes by the player with the white pieces in time scramble (remaining time less than or equal to 10% of the starting time)"),
-                                      p("- Black_long_moves: Number of moves by the player with the black pieces that required more than 10% of the starting time"),
-                                      p("- White_long_moves: Number of moves by the player with the white pieces that required more than 10% of the starting time"),
-                                      p("- Black_bad_long_moves: Number of long moves by the player with the black pieces that were inferior"),
-                                      p("- White_bad_long_moves: Number of long moves by the player with the white pieces that were inferior "),
-                                      p("- Game_flips: Number of times in the game where the balance of the game changed"),
-                                      p("- Game_flips_ts: Number of times in the game where the balance of the game changed and the players were in time scramble")
+                                      tags$ul(
+                                        tags$li("game_id: Custom field for Game ID (not from lichess.org or original database)"),
+                                        tags$li("BlackElo: Elo rating of the player with the black pieces"),
+                                        tags$li("BlackRatingDiff: Rating change (gain/loss) after game conclusion for the player with the black pieces"),
+                                        tags$li("WhiteElo: Elo rating of the player with the white pieces"),
+                                        tags$li("WhiteRatingDiff: Rating change (gain/loss) after game conclusion for the player with the white pieces"),
+                                        tags$li("Date: Date the game was played"),
+                                        tags$li("UTCTime: Time the game was played"),
+                                        tags$li("Event: Event where the game was played"),
+                                        tags$li("Site: URL of the game"),
+                                        tags$li("ECO: Game opening (ECO notation)"),
+                                        tags$li("Opening: Game opening"),
+                                        tags$li("Result: Result of the game ==> 
+                                                  1-0 -- White victory || 
+                                                  0-1 -- Black victory || 
+                                                  1/2-1/2 -- Draw || 
+                                                  * -- Undecided"),
+                                        tags$li("Termination: Way the game terminated ==> 
+                                                  Time forfeit -- One of the players ran out of time || 
+                                                  Normal -- Game terminated with check mate || 
+                                                  Rules infraction -- Game terminated due to rule breaking || 
+                                                  Abandoned -- Game was abandoned"),
+                                        tags$li("TimeControl: Timecontrol in seconds that was used for the game (Starting time: Increment) ==>
+                                                  Black_elo_category: ELO category of the player with the black pieces ||
+                                                  Low rating -- Rating below 1900 ||
+                                                  High rating -- Rating above 1900 and below 2400 ||
+                                                  GM rating -- Rating above 2400"),
+                                        tags$li("starting_time: The time in seconds that the players have available at the start of the game (taken from TimeControl); EMPTY -- Correspondence games"),
+                                        tags$li("increment: Time increment in seconds that was used in the game (taken from TimeControl); EMPTY -- Correspondence games "),
+                                        tags$li("Game_type: Type of game based on TimeControl ==> 
+                                                  Bullet -- Starting time below 2 minutes || 
+                                                  Blitz -- Starting time between 2 and 10 minutes ||
+                                                  Rapid -- Starting time between 10 and 15 minutes ||
+                                                  Classical -- Starting time above 15 minutes or increment 2 minutes or higher ||
+                                                  Correspondence -- No time information "),
+                                        tags$li("Total_moves: Total number of moves in the game"),
+                                        tags$li("player_moves: Custom field for moves per player; calculated as Total_moves/2, rounded up to nearest integer; will be slightly off for odd number of Total_moves"),
+                                        tags$li("Black_blunders: Number of blunders by the player with the black pieces (move annotation ?? in the PGN)"),
+                                        tags$li("White_blunders: Number of blunders by the player with the white pieces (move annotation ?? in the PGN)"),
+                                        tags$li("Black_mistakes: Number of mistakes by the player with the black pieces (move annotation ? in the PGN)"),
+                                        tags$li("White_mistakes: Number of mistakes by the player with the white pieces (move annotation ? in the PGN) "),
+                                        tags$li("Black_inaccuracies: Number of inaccuracies by the player with the black pieces (move annotation ?! in the PGN)"),
+                                        tags$li("White_inaccuracies: Number of inaccuracies by the player with the white pieces (move annotation ?! in the PGN) "),
+                                        tags$li("Black_inferior_moves: Black_blunders + Black_mistakes + Black_inaccuracies"),
+                                        tags$li("White_inferior_moves: White_blunders + White_mistakes + White_inaccuracies "),
+                                        tags$li("Black_ts_moves: Number of moves by the player with the black pieces in time scramble (remaining time less than or equal to 10% of the starting time)"),
+                                        tags$li("White_ts_moves: Number of moves by the player with the white pieces in time scramble (remaining time less than or equal to 10% of the starting time)"),
+                                        tags$li("Black_ts_blunders: Number of blunders by the player with the black pieces in time scramble (remaining time less than or equal to 10% of the starting time)"),
+                                        tags$li("White_ts_blunders: Number of blunders by the player with the white pieces in time scramble (remaining time less than or equal to 10% of the starting time)"),
+                                        tags$li("Black_ts_mistakes: Number of mistakes by the player with the black pieces in time scramble (remaining time less than or equal to 10% of the starting time)"),
+                                        tags$li("White_ts_mistakes: Number of mistakes by the player with the white pieces in time scramble (remaining time less than or equal to 10% of the starting time)"),
+                                        tags$li("Black_long_moves: Number of moves by the player with the black pieces that required more than 10% of the starting time"),
+                                        tags$li("White_long_moves: Number of moves by the player with the white pieces that required more than 10% of the starting time"),
+                                        tags$li("Black_bad_long_moves: Number of long moves by the player with the black pieces that were inferior"),
+                                        tags$li("White_bad_long_moves: Number of long moves by the player with the white pieces that were inferior "),
+                                        tags$li("Game_flips: Number of times in the game where the balance of the game changed"),
+                                        tags$li("Game_flips_ts: Number of times in the game where the balance of the game changed and the players were in time scramble")
+                                      )
+                                      )
                                     )
-                             )
                            ),
                   tabPanel("FAQ",
                            h2("FAQ"),  
                            tags$div(style = "max-width: 800px; word-wrap: break-word;",
+                                    h3("What research questions is this data exploration designed to answer?"),
                                     tags$div(
-                                      h3('What research questions is this data exploration meant to answer?'),
-                                      p('1. How many errors do stronger players make vs weaker players?  Does this change depending on severity of error?'),
-                                      p('2. Do stronger players end up in time trouble more often than weaker players?  How does time trouble affect their error rate?'),
-                                      p('3. Do stronger players have more "long thinks" than weaker players?  Does thinking longer on these moves affect their accuracy?'),
-                                      p('4. What are the most popular openings that players choose, and how effective are they?')
-                                      ),
+                                      tags$ol(
+                                        tags$li('How many errors do stronger players make vs. weaker players?  Does this change depending upon the severity of error?'),
+                                        br(),
+                                        tags$li('Do stronger players end up in time trouble more often than weaker players?  How does time trouble affect their error rate?'),
+                                        br(),
+                                        tags$li('Do stronger players have more "long thinks" than weaker players?  Does thinking longer on these moves affect their accuracy?'),
+                                        br(),
+                                        tags$li('What are the most popular openings that players choose, and how effective are they?')
+                                      )
                                     )
+                           )
                            )
                   )
                 )
