@@ -123,7 +123,7 @@ shinyServer(function(input, output) {
             axis.title.x = element_text(margin = margin(t=30)),
             plot.title = element_text(hjust = 0.5))
     
-    ggplotly(ggplot_obj2)
+    ggplotly(ggplot_obj2, tooltip = c('x', 'y'))
   })
   
   output$ts_dist_plot <- renderPlotly({
@@ -183,8 +183,13 @@ shinyServer(function(input, output) {
     # Openings >> Ranking
     # ----------------------------------------------------------------------------
   
+    filtered_openings <- reactive({
+      req(input$min_games)
+      openings_data_agg %>% filter(`Total Games` >= input$min_games)
+    })  
+    
     output$openings_table <- renderDT({
-      table <- datatable(openings_data_agg,
+      table <- datatable(filtered_openings(),
                 options = list(
                   pageLength = 20,
                   autoWidth = TRUE,

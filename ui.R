@@ -253,6 +253,7 @@ shinyUI(dashboardPage(
                 tabsetPanel(
                   tabPanel("Ranking",
                            h2("Interactive Openings Data Table"),
+                           fluidRow(column(12, numericInput("min_games", "Minimum number of games:", value = 1, min = 1))),
                            fluidRow(column(8, DTOutput("openings_table")))
                   ),
                   tabPanel("ECO Cloud",
