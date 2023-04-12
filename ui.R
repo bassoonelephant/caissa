@@ -207,7 +207,7 @@ shinyUI(dashboardPage(
                              "For reference, Magnus Carlsen - the world #1 ranked player - had an Elo rating of 2852 in blitz chess as of April 2023"
                              )
                            ),
-                  tabPanel("Time Trouble",
+                  tabPanel("Time Scrambles",
                            h2("Effect of Time Scrambles on Blunders"),
                            tabsetPanel(
                              tabPanel("Summary",
@@ -226,7 +226,7 @@ shinyUI(dashboardPage(
                                       )
                              )
                            ),
-                  tabPanel("Long Thinks",
+                  tabPanel("Long Moves",
                            h2("Effect of Long Moves on Inferior Moves"),
                            tabsetPanel(
                              tabPanel("Summary",

@@ -121,7 +121,8 @@ shinyServer(function(input, output) {
       labs(x = "Move Type", y = "Blunders Per 100 Moves", title = "Summary of Blunder Rates by Time Condition and Player Strength") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1),
             axis.title.x = element_text(margin = margin(t=30)),
-            plot.title = element_text(hjust = 0.5))
+            plot.title = element_text(hjust = 0.5),
+            legend.position = "none")
     
     ggplotly(ggplot_obj2, tooltip = c('x', 'y'))
   })
@@ -137,9 +138,10 @@ shinyServer(function(input, output) {
       labs(x = "Move Type", y = "Blunders Per Game Per 100 Moves", title = "Distribution of Blunder Rates by Time Condition and Player Strength") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1),
             axis.title.x = element_text(margin = margin(t=30)),
-            plot.title = element_text(hjust = 0.5))
+            plot.title = element_text(hjust = 0.5),
+            legend.position = "none")
     
-    ggplotly(ggplot_obj3)
+    ggplotly(ggplot_obj3, tooltip = c('x', 'y'))
   })
   
     # ----------------------------------------------------------------------------
@@ -158,9 +160,10 @@ shinyServer(function(input, output) {
       labs(x = "Move Type", y = "Inferior Moves Per 100 Moves", title = "Summary of Inferior Move Rates by Long Moves and Player Strength") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1),
             axis.title.x = element_text(margin = margin(t=30)),
-            plot.title = element_text(hjust = 0.5))
+            plot.title = element_text(hjust = 0.5),
+            legend.position = "none")
     
-    ggplotly(ggplot_obj4)
+    ggplotly(ggplot_obj4, tooltip = c('x', 'y'))
     })
   
     output$lm_dist_plot <- renderPlotly({
@@ -174,9 +177,10 @@ shinyServer(function(input, output) {
       labs(x = "Move Type", y = "Inferior Moves Per Game Per 100 Moves", title = "Distribution of Inferior Move Rates by Long Moves and Player Strength") +
       theme(axis.text.x = element_text(angle = 45, hjust = 1),
             axis.title.x = element_text(margin = margin(t=30)),
-            plot.title = element_text(hjust = 0.5))
+            plot.title = element_text(hjust = 0.5),
+            legend.position = "none")
     
-    ggplotly(ggplot_obj5)
+    ggplotly(ggplot_obj5, tooltip = c('x', 'y'))
     })
   
     # ----------------------------------------------------------------------------
