@@ -42,6 +42,7 @@ shinyUI(dashboardPage(
                                       tags$ul(
                                         tags$li("Link to dataset: ",
                                                 tags$a(href="https://www.kaggle.com/datasets/noobiedatascientist/lichess-september-2020-data", "Kaggle dataset")),
+                                        br(),
                                         tags$li("This data is taken from a sample of Lichess games played during the month of September 2020.  
                                                 The games were annotated by Stockfish, which is an open-source chess engine.")
                                     )),
@@ -50,10 +51,12 @@ shinyUI(dashboardPage(
                                       tags$ul(
                                         tags$li("Link to data preprocessing script: ",
                                                 tags$a(href="https://github.com/bassoonelephant/caissa/blob/main/caissa_preproc.Rmd", "Preprocessing script")),
+                                        br(),
                                         tags$li("The original dataset comprised over 3.7m games (observations) and 40 variables.
                                                 I took a subset of the data, selecting only blitz games.  Blitz games are defined as games
                                                 where each player starts with between 2-10 minutes on their clock.  This new dataset
                                                 comprises over 1.8m games and 40 variables."),
+                                        br(),
                                         tags$li("In addition, a custom game_id variable was created, and date/time variables were converted to appropriate formats.")
                                         )
                                       )
@@ -139,7 +142,30 @@ shinyUI(dashboardPage(
                                         br(),
                                         tags$li('What are the most popular openings that players choose, and how effective are they?')
                                       )
+                                    ),
+                                    h3("How do I use the Interactive Data Openings Table to find what moves are most favorable for white and black?"),
+                                    tags$div(
+                                      tags$ul(
+                                        tags$li('A good way to do this is to first pick a minimum threshold of games to ensure that we are getting a large enough sample size.  
+                                                Do this by entering a number into the text box above the table.  You can try with 100 or 1,000 games as a start.'),
+                                        br(),
+                                        tags$li('Then filter the remaining openings by White or Black win percentage.  
+                                                This will give you an ordered list of the most favorable openings that players used in the sample!')
+                                      )
+                                    ),
+                                    h3("Why are there players rated above 2900 in the dataset if the top players are all rated below this, and why does the data for these players look so odd e.g. blunder rates, etc.?"),
+                                    tags$div(
+                                      tags$ul(
+                                        tags$li("Lichess's rating system is not equivalent to official FIDE ratings, and is considered to be weaker.  
+                                                Some analyses estimate that a typical Lichess rating could be hundreds of points higher than its equivalent FIDE rating, depending upon the rating level."),
+                                        br(),
+                                        tags$li("As for why the data for Elo's above 2900 looks so strange, keep in mind that the sample sizes for these ratings levels is extremely small.  
+                                        Below is a plot showing the distribution of Elo ratings in the dataset."),
+                                        br(),
+                                        tags$li(plotlyOutput("elo_dist_plot"))
+                                      )
                                     )
+                                    
                            )
                            )
                   )

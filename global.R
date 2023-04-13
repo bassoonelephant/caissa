@@ -1,6 +1,6 @@
-# 1. SETUP
+# SETUP
 
-## A. Load Libraries
+## 1. Load Libraries
 
 library(shiny)
 library(dplyr)
@@ -14,17 +14,48 @@ library(RColorBrewer)
 library(DT)
 library(wordcloud2)
 
-## B. Load Processed Dataset ===
+## 2. Load Processed Dataset ===
 
 blitz <- readRDS(file = "./data/blitzgames_processed.rds")
 
+
 # ------------------------------------------------------------------------------------------------------
 
-# 2. BAD MOVES
+# FAQ
 
-## A. Data Manipulation for Bad Moves Analysis
+## 1. Elo Distribution Data
 
-### 1. Select needed columns
+### A. Set up Elo dataframe
+elo_analysis <- blitz %>% 
+  select(game_id, BlackElo, WhiteElo) %>%
+  pivot_longer(cols = c("BlackElo", "WhiteElo"),
+               names_to = "player_color",
+               values_to = "elo") %>%
+  mutate(player_color = ifelse(player_color == "BlackElo", "Black", "White")) %>%
+  select(game_id, player_color, elo)
+
+### B. Discretize Elo data
+elo_summary <- elo_analysis %>%
+  mutate(elo_bin = cut(elo,
+                       breaks = seq (0, 4000, by = 100),
+                       include.lowest = TRUE,
+                       right = FALSE,
+                       labels = paste0(seq(0, 3900, by = 100), "-", seq(100, 4000, by = 100))
+  )
+  ) %>%
+  group_by(elo_bin) %>%
+  summarize(
+    count_players = n()
+  )
+
+
+# ------------------------------------------------------------------------------------------------------
+
+# BAD MOVES
+
+## 1. Data Manipulation for Bad Moves Analysis
+
+### A. Select needed columns
 bad_move_data <- blitz %>% 
   select(game_id, 
          Result, 
@@ -41,7 +72,7 @@ bad_move_data <- blitz %>%
          Total_moves,
          player_moves)
 
-### 2. Set up error dataframes
+### B. Set up error dataframes
 
 all_bad_moves <- bad_move_data %>%  # add blunders
   select(game_id, WhiteElo, BlackElo, player_moves, White_blunders, Black_blunders) %>%
@@ -96,11 +127,11 @@ all_bad_moves <- all_bad_moves %>%  # add inferior moves
 
 # ------------------------------------------------------------------------------------------------------
 
-# 3. TIME
+# TIME
 
-## A. Timed Moves
+## 1. Timed Moves
 
-### 1. Select needed columns
+### A. Select needed columns
 
 time_data <- blitz %>% 
   select(game_id, 
@@ -120,7 +151,7 @@ time_data <- blitz %>%
          Total_moves,
          player_moves)
 
-### 2. Set up time scramble and long move dataframes
+### B. Set up time scramble and long move dataframes
 
 all_timed_moves <- time_data %>%  # add time scramble moves
   select(game_id, WhiteElo, BlackElo, player_moves, White_ts_moves, Black_ts_moves) %>%
@@ -146,7 +177,7 @@ all_timed_moves <- all_timed_moves %>%  # add long moves
               select(game_id, player, elo, time_type, timed_moves, player_moves)
   )
 
-## B. Time Scrambles
+## 2. Time Scrambles
 
 black_ts <- blitz %>%
   select(rating_category = Black_elo_category, 
@@ -190,7 +221,7 @@ dist_ts <- combined_ts %>%
                values_to = "blunder_rate") %>%
   drop_na(blunder_rate)
 
-## C. Long Moves
+## 3. Long Moves
 
 black_lm <- blitz %>%
   select(rating_category = Black_elo_category, 
@@ -234,15 +265,13 @@ dist_lm <- combined_lm %>%
   drop_na(inferior_move_rate)
 
 
-
-
 # ------------------------------------------------------------------------------------------------------
 
-# 4. OPENINGS
+# OPENINGS
 
-## A. Rankings
+## 1. Rankings
 
-### 1. Select needed columns
+### A. Select needed columns
 
 openings_data <- blitz %>% 
   select(game_id, 
@@ -255,7 +284,7 @@ openings_data <- blitz %>%
          White_ts_moves,
          player_moves)
 
-### 2. Set up dataframes for datatable
+### B. Set up dataframes for datatable
 
 openings_data_agg <- openings_data %>%
   group_by(Opening, ECO) %>%
