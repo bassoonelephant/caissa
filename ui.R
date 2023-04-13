@@ -143,16 +143,6 @@ shinyUI(dashboardPage(
                                         tags$li('What are the most popular openings that players choose, and how effective are they?')
                                       )
                                     ),
-                                    h3("How do I use the Interactive Data Openings Table to find what moves are most favorable for white and black?"),
-                                    tags$div(
-                                      tags$ul(
-                                        tags$li('A good way to do this is to first pick a minimum threshold of games to ensure that we are getting a large enough sample size.  
-                                                Do this by entering a number into the text box above the table.  You can try with 100 or 1,000 games as a start.'),
-                                        br(),
-                                        tags$li('Then filter the remaining openings by White or Black win percentage.  
-                                                This will give you an ordered list of the most favorable openings that players used in the sample!')
-                                      )
-                                    ),
                                     h3("Why are there players rated above 2900 in the dataset if the top players are all rated below this, and why does the data for these players look so odd e.g. blunder rates, etc.?"),
                                     tags$div(
                                       tags$ul(
@@ -164,9 +154,18 @@ shinyUI(dashboardPage(
                                         br(),
                                         tags$li(plotlyOutput("elo_dist_plot"))
                                       )
+                                    ),
+                                    h3("How do I use the Interactive Data Openings Table to find what moves are most favorable for white and black?"),
+                                    tags$div(
+                                      tags$ul(
+                                        tags$li('A good way to do this is to first pick a minimum threshold of games to ensure that we are getting a large enough sample size.  
+                                                Do this by entering a number into the text box above the table.  You can try with 100 or 1,000 games as a start.'),
+                                        br(),
+                                        tags$li('Then filter the remaining openings by White or Black win percentage.  
+                                                This will give you an ordered list of the most favorable openings that players used in the sample!')
+                                        )
+                                      )
                                     )
-                                    
-                           )
                            )
                   )
                 )
