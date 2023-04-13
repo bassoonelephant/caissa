@@ -8,7 +8,7 @@ shinyServer(function(input, output) {
   output$elo_dist_plot <- renderPlotly({
     elo_dist_ggplot <- ggplot(elo_summary, aes(x = elo_bin, y = count_players)) +
       geom_bar(stat = "identity") +
-      geom_text(aes(label = count_players), nudge_y = max(elo_summary$count_players) * 0.02, size = 2) +
+      geom_text(aes(label = count_players), nudge_y = max(elo_summary$count_players) * 0.02, size = 2.3) +
       labs(x = "Elo Bin", y = "Number of Players", title = "Distribution of Elo Ratings") +
       scale_y_continuous(labels = scales::comma) +
       theme(axis.text.x = element_text(angle = 45, hjust = 1),

@@ -152,7 +152,7 @@ shinyUI(dashboardPage(
                                         tags$li("As for why the data for Elo's above 2900 looks so strange, keep in mind that the sample sizes for these ratings levels is extremely small.  
                                         Below is a plot showing the distribution of Elo ratings in the dataset."),
                                         br(),
-                                        tags$li(plotlyOutput("elo_dist_plot"))
+                                        tags$li(plotlyOutput("elo_dist_plot", width = "100%", height = "500px"))
                                       )
                                     ),
                                     h3("How do I use the Interactive Data Openings Table to find what moves are most favorable for white and black?"),
@@ -164,7 +164,17 @@ shinyUI(dashboardPage(
                                         tags$li('Then filter the remaining openings by White or Black win percentage.  
                                                 This will give you an ordered list of the most favorable openings that players used in the sample!')
                                         )
+                                      ),
+                                    h3("What future topics would be interesting to explore?"),
+                                    tags$div(
+                                      tags$ul(
+                                        tags$li('Analyze Openings popularity and win rates by Elo rating.  Do stronger player choose different openings than weaker players?'),
+                                        br(),
+                                        tags$li('Analyze Openings by time scrambles and long moves.  Given that we know time scrambles and long moves are correlated with more errors,
+                                                what openings should a player pick to maximize the probability that his/her opponent will have time management trouble?  Does this vary
+                                                by player strength?')
                                       )
+                                    )
                                     )
                            )
                   )
