@@ -171,7 +171,7 @@ shinyUI(dashboardPage(
                                         tags$li('Analyze Openings popularity and win rates by Elo rating.  Do stronger player choose different openings than weaker players?'),
                                         br(),
                                         tags$li('Analyze Openings by time scrambles and long moves.  Given that we know time scrambles and long moves are correlated with more errors,
-                                                what openings should a player pick to maximize the probability that his/her opponent will have time management trouble?  Does this vary
+                                                what openings should a player pick to maximize the probability that his/her opponent will have time management problems?  Does this vary
                                                 by player strength?')
                                       )
                                     )
